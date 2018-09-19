@@ -1,4 +1,5 @@
-# 350_Banking
+# CIS_350_Project
+
 Programmed by:
 Trevor West
 Grant Iverson
