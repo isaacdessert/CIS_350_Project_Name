@@ -20,14 +20,15 @@ public class ManagerPanel {
 	
 	List<String> manager;
 	
-	ManagerPanel(JFrame pWindow){
+	/** logged in as manager. */
+	ManagerPanel(final JFrame pWindow, final String employeeID) {
 		window = pWindow;
 		managerTools = new JPanel();
 		manager = getManager();
 		
 		System.out.println(manager);
-		//mID = manager[0];
-		//name = manager.get(1);
+		mID = manager.get(0);
+		name = manager.get(1);
 	}
 	
 	
