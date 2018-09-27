@@ -16,7 +16,7 @@ import javax.swing.JFrame;
 public class ValidateAccess {
 	
 	JFrame window;
-	
+//Hello	
 	/** Cnstructor. */
 	ValidateAccess(JFrame pWindow) {
 		
