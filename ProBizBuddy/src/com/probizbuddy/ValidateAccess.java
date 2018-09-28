@@ -16,8 +16,41 @@ import javax.swing.JFrame;
 public class ValidateAccess {
 	
 	JFrame window;
-//Hello	
-	/** Cnstructor. */
+	
+	/** Default constructor. */
+	ValidateAccess() {
+		if (fileExists("ManagersDB.txt")) {
+			System.out.println("ManagersDB exists");
+			/** if there are no managers, add one */
+			if (dbResults("ManagersDB.txt") == null) {
+				// need to set up an account
+				System.out.println("There are no managers. Must add one.");
+				AddManager add = new AddManager(window); // change to add manager
+				add.showForum();
+			}
+			
+		} else {
+			// need to set up an account
+			AddManager add = new AddManager(window);
+			add.showForum();
+		}
+		
+		
+		if (fileExists("WorkersDB.txt")) {
+			System.out.println("WorkersDB exists");
+		}
+		
+		if (fileExists("TimeLogDB.txt")) {
+			System.out.println("TimeLogDB exists");
+		}
+		
+		if (fileExists("Settings.txt")) {
+			System.out.println("Settings exists");
+		}
+	}
+	
+	/** Costructor. */
+>>>>>>> 18bcc38b19bd0144f43a04df3d66eef792dff23d
 	ValidateAccess(JFrame pWindow) {
 		
 		window = pWindow;
@@ -89,7 +122,9 @@ public class ValidateAccess {
 		BufferedReader br = null;
 		String line = null;
 		String workersList = "";
-		List<String> workersArray;
+		List<String>  workersArray;
+		
+		System.out.println("Reading file " + file);
 		
 		try {
 			br = new BufferedReader(new FileReader(file));
@@ -103,6 +138,7 @@ public class ValidateAccess {
 			    System.out.println(file + " is empty.");
 			    return null;
 			} else {
+				System.out.println("Scanning...");
 				while ((line = br.readLine()) != null) {
 					workersList += line;
 				}
@@ -112,7 +148,9 @@ public class ValidateAccess {
 			e.printStackTrace();
 		}
 		
-		workersArray = new ArrayList<String>(Arrays.asList(workersList.split(", ")));
+		System.out.println("ArrayList created!");
+		
+		workersArray = Arrays.asList(workersList.split("\\s*,\\s*"));
 		
 		return workersArray;
 	}
