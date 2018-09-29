@@ -55,8 +55,9 @@ public class ValidateAccess {
 		}
 	}
 	
-	/** Costructor. */
-	ValidateAccess(JFrame pWindow) {
+	/** Costructor.
+	 * @param pWindow : the window */
+	ValidateAccess(final JFrame pWindow) {
 		
 		window = pWindow;
 		

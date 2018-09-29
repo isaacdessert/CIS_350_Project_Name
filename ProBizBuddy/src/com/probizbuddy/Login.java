@@ -93,7 +93,7 @@ public class Login {
 		return false;
 	}
 
-	
+	/** show the log in panel on the jframe. */
 	public void showPanel() {
 		System.out.println("-- Show the log in screen --");
 		

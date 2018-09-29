@@ -22,7 +22,9 @@ public class ManagerPanel {
 	List<String> manager;
 	
 	/** logged in as manager. 
-	 * @throws FileNotFoundException */
+	 * @throws FileNotFoundException 
+	 * @param pWindow : window
+	 * @param id : manager unique id */
 	ManagerPanel(final JFrame pWindow, final String id) throws FileNotFoundException {
 		window = pWindow;
 		managerTools = new JPanel();
