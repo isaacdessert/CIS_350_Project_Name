@@ -6,9 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.swing.JFrame;
 
@@ -16,6 +19,8 @@ import javax.swing.JFrame;
 public class ValidateAccess {
 	
 	JFrame window;
+	
+	boolean loginReady = false;
 	
 	/** Default constructor. */
 	ValidateAccess() {
@@ -25,6 +30,7 @@ public class ValidateAccess {
 			if (dbResults("ManagersDB.txt") == null) {
 				// need to set up an account
 				System.out.println("There are no managers. Must add one.");
+				
 				AddManager add = new AddManager(window); // change to add manager
 				add.showForum();
 			}
@@ -62,12 +68,18 @@ public class ValidateAccess {
 				System.out.println("There are no managers. Must add one.");
 				AddManager add = new AddManager(window); // change to add manager
 				add.showForum();
+				
+				loginReady = false;
+			} else {
+			
+				loginReady = true;
 			}
 			
 		} else {
 			// need to set up an account
 			AddManager add = new AddManager(window);
 			add.showForum();
+			loginReady = false;
 		}
 		
 		
@@ -83,9 +95,13 @@ public class ValidateAccess {
 			System.out.println("Settings exists");
 		}
 		
-		// if everything is in order, bring them to a login screen.
-		Login login = new Login(window);
-		login.showPanel();
+		System.out.println("Login ready: " + loginReady);
+		
+		if (loginReady) {
+			// if everything is in order, bring them to a login screen.
+			Login login = new Login(window);
+			login.showPanel();
+		}
 	}
 
 	/** Check to see of the file exists.
@@ -127,20 +143,13 @@ public class ValidateAccess {
 		
 		try {
 			br = new BufferedReader(new FileReader(file));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
 
-		try {
 			if (br.readLine() == null) {
 			    System.out.println(file + " is empty.");
+			    br.close();
 			    return null;
 			} else {
-				System.out.println("Scanning...");
-				while ((line = br.readLine()) != null) {
-					workersList += line;
-				}
+				workersList = new String(Files.readAllBytes(Paths.get(file)));
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -148,10 +157,37 @@ public class ValidateAccess {
 		}
 		
 		System.out.println("ArrayList created!");
+		System.out.println("List: " + workersList);
+		 
 		
 		workersArray = Arrays.asList(workersList.split("\\s*,\\s*"));
 		
 		return workersArray;
+	}
+	
+	
+	
+	
+	
+	/** Get the line from the database. 
+	 * @param file : file
+	 * @param id : employee id
+	 * @return the list of this users data
+	 * @throws FileNotFoundException */
+	public  List<String> getUserData(final String file, final String id) throws FileNotFoundException {
+		File doc = new File(file);
+		final Scanner scanner = new Scanner(doc);
+
+		while (scanner.hasNextLine()) {
+			final String lineFromFile = scanner.nextLine();
+			List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
+			// id, name, password
+			if (user.get(0).equals(id)) { 
+				return user;
+			}
+		}
+		System.out.println("No user matched this ID");
+		return null;
 	}
 
 }

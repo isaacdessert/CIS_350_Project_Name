@@ -3,6 +3,7 @@ package com.probizbuddy;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -20,35 +21,20 @@ public class ManagerPanel {
 	
 	List<String> manager;
 	
-	/** logged in as manager. */
-	ManagerPanel(final JFrame pWindow, final String employeeID) {
+	/** logged in as manager. 
+	 * @throws FileNotFoundException */
+	ManagerPanel(final JFrame pWindow, final String id) throws FileNotFoundException {
 		window = pWindow;
 		managerTools = new JPanel();
-		manager = getManager();
+		mID = id;
 		
-		System.out.println(manager);
-		mID = manager.get(0);
+		ValidateAccess v = new ValidateAccess(window);
+		manager = v.getUserData("ManagersDB.txt", mID);
 		name = manager.get(1);
 	}
 	
 	
-	/** Get the array of info from the database about this manager. 
-	 * @return array from database. */
-	public List<String> getManager() {
-		ValidateAccess v = new ValidateAccess(window);
-		if (v.fileExists("ManagersDB.txt")) {
-			return v.dbResults("ManagersDB.txt");
-			
-		} else {
-			// abort and log out
-			managerTools.setVisible(false);
-			
-			AddManager manager = new AddManager(window);
-			manager.showForum();
-		}
-		
-		return null;
-	}
+
 	
 	public void showPanel() {
 		System.out.println("Logged in, show the manager's panel.");

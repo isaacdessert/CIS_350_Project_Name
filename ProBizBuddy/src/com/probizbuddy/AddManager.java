@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 /** Add a manager to the database. */
@@ -85,7 +86,7 @@ public class AddManager extends JPanel {
 		passwordLabel.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
 		newManager.add(passwordLabel, c);
 		
-		JTextField passInput = new JTextField(15);
+		JPasswordField passInput = new JPasswordField(15);
 		c.gridx = 2;
 		c.gridy = 3;
 		c.gridwidth = 2;
@@ -103,9 +104,11 @@ public class AddManager extends JPanel {
 			 
             public void actionPerformed(final ActionEvent e) {
             	
+            	String passText = new String(passInput.getPassword());
+            	
             		if (!nameInput.getText().equals("")) {
-            			if (!passInput.getText().equals("")) {
-            				setManager(nameInput.getText(), passInput.getText());
+            			if (!passInput.getPassword().equals("")) {
+            				setManager(nameInput.getText(), passText);
             				System.out.println("Account Created.");
                 		} else {
                 			errorLabel.setText("Please enter a password.");
@@ -137,7 +140,7 @@ public class AddManager extends JPanel {
 				
 				// redirect them to their manager's panel
     				newManager.setVisible(false);
-				ManagerPanel manager = new ManagerPanel(window);
+				ManagerPanel manager = new ManagerPanel(window, mid);
 				manager.showPanel();
 
 			} catch (IOException e) {
