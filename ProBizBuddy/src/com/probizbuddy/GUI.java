@@ -3,11 +3,17 @@ package com.probizbuddy;
 import java.awt.Color;
 import javax.swing.JFrame;
 
-/** gui. */
-public class GUI {
+/** GUI for Pro Biz Buddy. */
+final class GUI {
 	
-	/** create the GUI. */
-	public static void main(String[] args) {
+	/** Default constructor for Pro Biz Buddy. */
+	private GUI() {
+		
+	}
+	
+	/** create the GUI.
+	 * @param args : arguments. */
+	public static void main(final String[] args) {
 		JFrame window = new JFrame("ProBizBuddy");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		

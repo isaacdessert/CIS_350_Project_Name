@@ -18,10 +18,10 @@ import javax.swing.JFrame;
 public class ValidateAccess {
 	
 	/** window. */
-	JFrame window;
+	private JFrame window;
 	
 	/** only allows login of all files are in order. */
-	boolean loginReady = false;
+	private boolean loginReady = false;
 	
 	/** Default constructor. */
 	ValidateAccess() {
@@ -166,9 +166,6 @@ public class ValidateAccess {
 		
 		return workersArray;
 	}
-	
-	
-	
 	
 	
 	/** Get the line from the database. 

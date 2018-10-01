@@ -15,7 +15,6 @@ import java.io.PrintWriter;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -23,16 +22,26 @@ import javax.swing.JTextField;
 /** Add a manager to the database. */
 public class AddManager extends JPanel {
 	
-	JFrame window;
-	JTextField nameInput, passInput;
-	JButton login;
+	/** window. */
+	private JFrame window;
 	
-	JPanel newManager = new JPanel();
+	/** fields to add a manager. */
+	private JTextField nameInput, passInput;
 	
-	AddManager(JFrame pWindow) {
+	/** add manager button. */
+	private JButton login;
+	
+	/** holds fields for adding a manager. */
+	private JPanel newManager = new JPanel();
+	
+	/** Constructor for adding to the window.
+	 * @param pWindow : window */
+	AddManager(final JFrame pWindow) {
 		window = pWindow;
 	}
 	
+	
+	/** show the form to add a manager. */
 	public void showForum() {
 		// show name and password fields
 		System.out.println("-- Show a username and password field --");
@@ -130,8 +139,8 @@ public class AddManager extends JPanel {
 	public void setManager(final String name, final String password) {
 		try (FileWriter fw = new FileWriter("ManagersDB.txt", true);
 			    BufferedWriter bw = new BufferedWriter(fw);
-			    PrintWriter out = new PrintWriter(bw))
-			{
+				
+		    PrintWriter out = new PrintWriter(bw)) {
 				GenerateID mID = new GenerateID();
 				String mid = mID.getID();
 				

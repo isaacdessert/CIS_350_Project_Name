@@ -10,16 +10,20 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/** Main area for managers to control Pro Biz Buddy. */
 public class ManagerPanel {
 	
+	/** Window. */
+	private JFrame window;
 	
-	JFrame window;
+	/** Panel holding manager tools. */
+	private JPanel managerTools;
 	
-	JPanel managerTools;
+	/** Strings storing the manager's info. */
+	private String mID, name;
 	
-	String mID, name;
-	
-	List<String> manager;
+	/** Manager list from db. */
+	private List<String> manager;
 	
 	/** logged in as manager. 
 	 * @throws FileNotFoundException 
@@ -36,8 +40,7 @@ public class ManagerPanel {
 	}
 	
 	
-
-	
+	/** Show the panel on the GUI. */
 	public void showPanel() {
 		System.out.println("Logged in, show the manager's panel.");
 		

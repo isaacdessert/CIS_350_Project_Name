@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -21,32 +20,48 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+/** Login for employees and employers. */
 public class Login {
 	
-	JFrame window;
+	/** window. */
+	private JFrame window;
 	
-	JPanel login = new JPanel();;
+	/** Panel that holds log in fields. */
+	private JPanel login = new JPanel();
 	
-	JButton signin;
+	/** sign in button. */
+	private JButton signin;
 	
-	JTextField idInput;
+	/** text field for user or employee id. */
+	private JTextField idInput;
 	
-	JPasswordField passInput;
+	/** password field. */
+	private JPasswordField passInput;
 	
-	String eID, password;
+	/** string to store id and password. */
+	private String eID, password;
 	
-	List<String> employeeList, managersList;
+	/** whether the person logging in is a manager or employee. */
+	private boolean isManager;
 	
-	boolean isManager;
 	
-	Login(JFrame pWindow) {
+	/** Constructor for viewing the log in screen.
+	 * @param pWindow : the window */
+	Login(final JFrame pWindow) {
 		window = pWindow;
 		eID = "";
 		password = "";
-		
 	}
 	
-	public boolean userFound(String file, String id, String pass) throws FileNotFoundException {
+	
+	/** Function to find the user in the database. 
+	 * @param file : file name
+	 * @param id : user's id
+	 * @param pass : user's password
+	 * @return whether the user was found
+	 * @throws FileNotFoundException : whether the database file exists */
+	public boolean userFound(final String file, final String id, final String pass) 
+			throws FileNotFoundException {
 		File doc = new File(file);
 		final Scanner scanner = new Scanner(doc);
 		System.out.println("Searching DB for user");
@@ -70,8 +85,11 @@ public class Login {
 	
 	
 	/** check to see whether the credentials are valid for a user.
-	 *  @return whether it is valid */
-	public boolean validateCredentials(String pId, String pPassword) 
+	 * @param pId : person's id
+	 * @param pPassword : person's password
+	 * @return whether it is valid
+	 * @throws FileNotFoundException : whether the database file exists */
+	public boolean validateCredentials(final String pId, final String pPassword) 
 			throws FileNotFoundException {
 		// match what was entered to the database
 		System.out.println("Validating Credentials");
@@ -93,6 +111,7 @@ public class Login {
 		return false;
 	}
 
+	
 	/** show the log in panel on the jframe. */
 	public void showPanel() {
 		System.out.println("-- Show the log in screen --");
@@ -161,7 +180,8 @@ public class Login {
 		login.add(signin, c);
 		
 		signin.addActionListener(new ActionListener() {
-			 
+			
+			// if the sign in button was pushed
             public void actionPerformed(final ActionEvent e) {
             	
             		if (!idInput.getText().equals("")) {

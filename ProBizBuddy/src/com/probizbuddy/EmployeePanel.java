@@ -17,6 +17,7 @@ public class EmployeePanel {
 	/** clock in and clock out buttons. */
 	private JButton clockIn, clockOut;
 	
+	/** panel for clocking in and out. */
 	private JPanel clock = new JPanel();
 
 	/** 
@@ -82,10 +83,14 @@ public class EmployeePanel {
 		window.getContentPane().add(clock);
 	}
 	
+	
+	/** Display the panel to the GUI. */
 	public void showPanel() {
 		System.out.println("Display employee panel");
 	}
 	
+	
+	/** User still clocks in. */
 	public void clockIn() {
 		clockIn.setEnabled(false);
 		clockIn.setVisible(false);
@@ -97,6 +102,8 @@ public class EmployeePanel {
 		
 	}
 	
+	
+	/** User clocks out. */
 	public void clockOut() {
 		clockOut.setEnabled(false);
 		clockOut.setVisible(false);
