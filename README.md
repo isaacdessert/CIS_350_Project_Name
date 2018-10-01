@@ -1,9 +1,7 @@
-# CIS_350_Project
+# CIS_350_ProBizBuddy
 
 Programmed by:
 Trevor West
 Grant Iverson
 Isaac Dessert
 
-
-This program is:

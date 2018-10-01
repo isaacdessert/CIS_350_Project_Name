@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -52,7 +53,12 @@ public class Login {
 		while (scanner.hasNextLine()) {
 		   final String lineFromFile = scanner.nextLine();
 		   System.out.println("Line: " + lineFromFile);
-		   if (lineFromFile.contains(id) && lineFromFile.contains(pass)) { 
+		   
+		   //convert line to an array and pull elements
+		   //this way you can see if the whole thing matches
+		   List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
+		   // id, name, password
+		   if (user.get(0).equals(id) && user.get(2).equals(pass)) { 
 		       // a match!
 		       System.out.println("I found " + id);
 		       return true;
@@ -87,7 +93,7 @@ public class Login {
 		return false;
 	}
 
-	
+	/** show the log in panel on the jframe. */
 	public void showPanel() {
 		System.out.println("-- Show the log in screen --");
 		

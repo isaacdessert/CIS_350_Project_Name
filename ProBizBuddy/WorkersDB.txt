@@ -1,1 +1,1 @@
-12345, Jane Doe, password, 10.00, 123-45-6789
+00000, Joe Mama, cis
