@@ -31,6 +31,7 @@ final class GUI {
 		window.pack();
 		Color blue = new Color(66, 153, 229);
 		window.getContentPane().setBackground(blue);
+		window.setBackground(blue);
 		//window.setLocationRelativeTo(null);
 		window.setSize(1080, 720);
 		
