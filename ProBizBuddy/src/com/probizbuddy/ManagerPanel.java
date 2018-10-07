@@ -28,15 +28,15 @@ public class ManagerPanel {
 	/** logged in as manager. 
 	 * @throws FileNotFoundException 
 	 * @param pWindow : window
-	 * @param id : manager unique id */
-	ManagerPanel(final JFrame pWindow, final String id) throws FileNotFoundException {
+	 * @param pName : manager's name */
+	ManagerPanel(final JFrame pWindow, final String pName) throws FileNotFoundException {
 		window = pWindow;
 		managerTools = new JPanel();
-		mID = id;
+		name = pName;
 		
 		ValidateAccess v = new ValidateAccess(window);
-		manager = v.getUserData("ManagersDB.txt", mID);
-		name = manager.get(1);
+		manager = v.getUserData("ManagersDB.txt", name);
+		mID = manager.get(0);
 	}
 	
 	

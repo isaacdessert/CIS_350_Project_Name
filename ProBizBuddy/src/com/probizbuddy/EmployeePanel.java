@@ -48,22 +48,31 @@ public class EmployeePanel {
 	private JTable table;
     
     /** Employee ID they logged in with. */
-    private String eID;
+    private String eID, eName;
     
     /** Creates an expandable data table. */
     private DefaultTableModel tableModel;
     
+    /** Manager list from db. */
+	private List<String> employee;
+    
 
 	/** 
 	 * constructor to set up the window.
-	 * @param employeeID : the employee that is logged in
+	 * @param employeeName : the employee that is logged in
 	 * @param pWindow : the gui
+	 * @throws FileNotFoundException 
 	 * */
-	public EmployeePanel(final JFrame pWindow, final String employeeID) {
-		System.out.println("Logged in as " + employeeID);
-		eID = employeeID;
+	public EmployeePanel(final JFrame pWindow, final String employeeName) throws FileNotFoundException {
+		eName = employeeName;
+		System.out.println("Logged in as " + employeeName);
 		
 		window = pWindow;
+		
+		ValidateAccess v = new ValidateAccess(window);
+		employee = v.getUserData("WorkersDB.txt", eName);
+		eID = employee.get(0);
+		System.out.println("eID = " + eID);
 		
 		// show their current hours if any exist
 	    try {
@@ -202,7 +211,10 @@ public class EmployeePanel {
 				// show clock in button
 				showClockInButton();
 			}
+		} else {
+			showClockInButton();
 		}
+		
 		
 		return false;
 	}
@@ -245,7 +257,7 @@ public class EmployeePanel {
 	 * @throws IOException */
 	private void clockOut() throws ParseException, IOException {
 		
-		if (tableModel.getValueAt(tableModel.getRowCount() - 1, 2).toString().equals("null")) {
+		
 			// replace that value in the text file
 			System.out.println("Replacing null with current time.");
 			
@@ -321,7 +333,7 @@ public class EmployeePanel {
 			workers.close();
 			
 			scanner.close();
-		}
+		
 		
 		
 		// refresh after the entry is updated

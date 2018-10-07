@@ -33,13 +33,13 @@ public class Login {
 	private JButton signin;
 	
 	/** text field for user or employee id. */
-	private JTextField idInput;
+	private JTextField nameInput;
 	
 	/** password field. */
 	private JPasswordField passInput;
 	
 	/** string to store id and password. */
-	private String eID, password;
+	private String eName, password;
 	
 	/** whether the person logging in is a manager or employee. */
 	private boolean isManager;
@@ -49,18 +49,18 @@ public class Login {
 	 * @param pWindow : the window */
 	Login(final JFrame pWindow) {
 		window = pWindow;
-		eID = "";
+		eName = "";
 		password = "";
 	}
 	
 	
 	/** Function to find the user in the database. 
 	 * @param file : file name
-	 * @param id : user's id
+	 * @param name : user's name
 	 * @param pass : user's password
 	 * @return whether the user was found
 	 * @throws FileNotFoundException : whether the database file exists */
-	public boolean userFound(final String file, final String id, final String pass) 
+	public boolean userFound(final String file, final String name, final String pass) 
 			throws FileNotFoundException {
 		File doc = new File(file);
 		final Scanner scanner = new Scanner(doc);
@@ -73,10 +73,10 @@ public class Login {
 		   //this way you can see if the whole thing matches
 		   List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
 		   // id, name, password
-		   if (user.get(0).equals(id) && user.get(2).equals(pass)) { 
+		   if (user.get(1).equals(name) && user.get(2).equals(pass)) { 
 		       // a match!
 			   scanner.close();
-		       System.out.println("I found " + id);
+		       System.out.println("I found " + name);
 		       return true;
 		   }
 		}
@@ -87,22 +87,22 @@ public class Login {
 	
 	
 	/** check to see whether the credentials are valid for a user.
-	 * @param pId : person's id
+	 * @param pName : person's name
 	 * @param pPassword : person's password
 	 * @return whether it is valid
 	 * @throws FileNotFoundException : whether the database file exists */
-	public boolean validateCredentials(final String pId, final String pPassword) 
+	public boolean validateCredentials(final String pName, final String pPassword) 
 			throws FileNotFoundException {
 		// match what was entered to the database
 		System.out.println("Validating Credentials");
-		eID = pId;
+		eName = pName;
 		password = pPassword;
 		
-		if (userFound("ManagersDB.txt", eID, password)) {
+		if (userFound("ManagersDB.txt", eName, password)) {
 			System.out.println("Manager Found. Logging in.");
 			isManager = true;
 			return true;
-		} else if (userFound("WorkersDB.txt", eID, password)) {
+		} else if (userFound("WorkersDB.txt", eName, password)) {
 			System.out.println("Worker Found. Logging in.");
 			isManager = false;
 			return true;
@@ -146,19 +146,19 @@ public class Login {
 		login.add(errorLabel, c);
 		
 		JLabel idLabel = new JLabel();
-		idLabel.setText("Employee ID: ");
+		idLabel.setText("Name: ");
 		c.gridx = 0;
 		c.gridy = 2;
 		c.gridwidth = 1;
 		idLabel.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
 		login.add(idLabel, c);
 		
-		idInput = new JTextField(5);
+		nameInput = new JTextField(5);
 		c.gridx = 2;
 		c.gridy = 2;
 		c.gridwidth = 2;
-		idInput.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
-		login.add(idInput, c);
+		nameInput.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
+		login.add(nameInput, c);
 		
 		JLabel passwordLabel = new JLabel();
 		passwordLabel.setText("Password: ");
@@ -186,7 +186,7 @@ public class Login {
 			// if the sign in button was pushed
             public void actionPerformed(final ActionEvent e) {
             	
-            		if (!idInput.getText().equals("")) {
+            		if (!nameInput.getText().equals("")) {
             			if (!(passInput.getPassword().length == 0)) {
             				
             				// see if the entry matches something in the database
@@ -195,17 +195,17 @@ public class Login {
             				try {
             					String passText = new String(passInput.getPassword());
             					
-            					if (validateCredentials(idInput.getText(), passText)) {
+            					if (validateCredentials(nameInput.getText(), passText)) {
 									
 									// determine whether they are an employee or manager
 									// manager
 									if (isManager) {
-										ManagerPanel employee = new ManagerPanel(window, idInput.getText());
+										ManagerPanel employee = new ManagerPanel(window, nameInput.getText());
 										login.setVisible(false); //hide the log in panel
 										employee.showPanel();
 									} else {
 										// employee
-										EmployeePanel employee = new EmployeePanel(window, idInput.getText());
+										EmployeePanel employee = new EmployeePanel(window, nameInput.getText());
 										login.setVisible(false); //hide the log in panel
 										employee.showPanel();
 									}

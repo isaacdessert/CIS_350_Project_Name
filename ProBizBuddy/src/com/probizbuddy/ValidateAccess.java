@@ -170,10 +170,10 @@ public class ValidateAccess {
 	
 	/** Get the line from the database. 
 	 * @param file : file
-	 * @param id : employee id
+	 * @param name : employee name
 	 * @return the list of this users data
 	 * @throws FileNotFoundException */
-	public  List<String> getUserData(final String file, final String id) throws FileNotFoundException {
+	public  List<String> getUserData(final String file, final String name) throws FileNotFoundException {
 		File doc = new File(file);
 		final Scanner scanner = new Scanner(doc);
 
@@ -181,14 +181,14 @@ public class ValidateAccess {
 			final String lineFromFile = scanner.nextLine();
 			List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
 			// id, name, password
-			if (user.get(0).equals(id)) { 
+			if (user.get(1).equals(name)) { 
 				scanner.close();
 				return user;
 			}
 		}
 		scanner.close();
 		
-		System.out.println("No user matched this ID");
+		System.out.println("No user matched this Name: " + name);
 		return null;
 	}
 
