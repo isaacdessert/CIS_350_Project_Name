@@ -75,11 +75,13 @@ public class Login {
 		   // id, name, password
 		   if (user.get(0).equals(id) && user.get(2).equals(pass)) { 
 		       // a match!
+			   scanner.close();
 		       System.out.println("I found " + id);
 		       return true;
 		   }
 		}
 		
+		scanner.close();
 		return false;
 	}
 	

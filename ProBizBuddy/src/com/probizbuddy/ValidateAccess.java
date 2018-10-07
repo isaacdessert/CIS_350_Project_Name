@@ -137,7 +137,7 @@ public class ValidateAccess {
 	 */
 	public List<String> dbResults(final String file) {
 		BufferedReader br = null;
-		String line = null;
+		//String line = null;
 		String workersList = "";
 		List<String>  workersArray;
 		
@@ -182,9 +182,12 @@ public class ValidateAccess {
 			List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
 			// id, name, password
 			if (user.get(0).equals(id)) { 
+				scanner.close();
 				return user;
 			}
 		}
+		scanner.close();
+		
 		System.out.println("No user matched this ID");
 		return null;
 	}

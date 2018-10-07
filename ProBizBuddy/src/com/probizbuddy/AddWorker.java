@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.swing.JFrame;
 
 /** Add a worker to the database. */
 public class AddWorker {
@@ -33,8 +32,7 @@ public class AddWorker {
 	public String setWorker(final String name, final double wage) {
 		try (FileWriter fw = new FileWriter("WorkersDB.txt", true);
 			    BufferedWriter bw = new BufferedWriter(fw);
-			    PrintWriter out = new PrintWriter(bw))
-			{
+			    PrintWriter out = new PrintWriter(bw)) {
 				GenerateID eID = new GenerateID();
 				String eid = eID.getID();
 			

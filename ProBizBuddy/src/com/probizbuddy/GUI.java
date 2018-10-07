@@ -18,7 +18,7 @@ final class GUI {
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//StartProgram start = new StartProgram(window);
-		ValidateAccess validate = new ValidateAccess(window);
+		new ValidateAccess(window);
 		
 		/*
 		if (start.getSettings() != null 
