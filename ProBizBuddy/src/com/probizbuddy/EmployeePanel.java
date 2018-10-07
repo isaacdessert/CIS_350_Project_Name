@@ -35,6 +35,9 @@ public class EmployeePanel {
 	/** clock in and clock out buttons. */
 	private JButton clockIn, clockOut;
 	
+	/** panel for displaying hours. */
+	private JPanel toolbar = new JPanel();
+	
 	/** panel for clocking in and out. */
 	private JPanel clock = new JPanel();
     
@@ -92,7 +95,6 @@ public class EmployeePanel {
 		/** set layout and bg */
 		clock.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.NONE;
 		
 		Color blue = new Color(66, 153, 229);
 		clock.setBackground(blue);
@@ -101,13 +103,9 @@ public class EmployeePanel {
 		clockIn = new JButton("Clock In");
 		clockIn.setFont(new Font("Arial Black", Font.BOLD, 20));
 		
-		c.fill = GridBagConstraints.HORIZONTAL;
+
 		c.ipadx = 50;
 		c.ipady = 25;
-		c.gridx = 0;
-		c.gridy = 0;
-		c.anchor = GridBagConstraints.PAGE_START; 
-		
 		clock.add(clockIn, c);
 
 		clockIn.addActionListener(new ActionListener() {
@@ -120,11 +118,13 @@ public class EmployeePanel {
             }
         });
 
+		
 		// clock out button
 		clockOut = new JButton("Clock Out");
 		clockOut.setFont(new Font("Arial Black", Font.BOLD, 20));
 		
 		clock.add(clockOut, c);
+		
 		clockOut.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
         		try {
@@ -148,27 +148,61 @@ public class EmployeePanel {
 		
 		// hours table header
 	    hours.setLayout(new GridBagLayout());
-	    
-	    c.fill = GridBagConstraints.NONE;
+	    c.ipady = 5;
+	    c.fill = GridBagConstraints.BOTH;
 	    c.anchor = GridBagConstraints.CENTER; 
-		c.insets = new Insets(0, 0, 0, 0);
-		//c.gridwidth = GridBagConstraints.REMAINDER;
-		c.gridx = 2;
-		c.gridy = 1;
+		c.gridx = 0;
+		c.gridy = 0;
 		hours.add(table.getTableHeader(), c);
 		
 		// hours table
-
-		c.gridx = 2;
-		c.gridy = 2;
-
+		c.gridx = 0;
+		c.gridy = 1;
 		hours.add(table, c);
 		
 		table.getTableHeader().setReorderingAllowed(false);
 		table.getTableHeader().setResizingAllowed(false);
 		
-		organizedPanel.add(clock);
-		organizedPanel.add(hours);
+		// make toolbar
+		JButton logout = new JButton("Log Out");
+		logout.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+        		System.out.println("Logging out.");
+        		Login l = new Login(window);
+        		organizedPanel.setVisible(false);
+        		organizedPanel.setEnabled(false);
+        		l.showPanel();
+            }
+        });
+
+		// toolbar
+		toolbar.add(logout);
+		
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.weightx = 1.0;
+		constraints.weighty = .2;
+
+		organizedPanel.add(toolbar, constraints);
+		
+		constraints.weightx = .5;
+		constraints.weighty = .4;
+		constraints.gridy = 1;
+		constraints.gridx = 1;
+		organizedPanel.add(clock, constraints);
+
+		constraints.gridx = 0;
+		constraints.gridy = 2;
+		constraints.gridwidth = 2;
+		organizedPanel.add(hours, constraints);
+
+
+		
+	    //organizedPanel.add(toolbar);
+		//organizedPanel.add(clock);
+		//organizedPanel.add(hours);
 		
 		organizedPanel.setBackground(blue);
 		
