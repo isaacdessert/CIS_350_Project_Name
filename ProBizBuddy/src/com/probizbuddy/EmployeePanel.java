@@ -1,5 +1,6 @@
 package com.probizbuddy;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -24,6 +25,7 @@ import java.util.Scanner;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -107,6 +109,7 @@ public class EmployeePanel {
 
 		c.ipadx = 50;
 		c.ipady = 25;
+		
 		clock.add(clockIn, c);
 
 		clockIn.addActionListener(new ActionListener() {
@@ -166,6 +169,8 @@ public class EmployeePanel {
 		
 		// make toolbar
 		JButton logout = new JButton("Log Out");
+		logout.setBackground(new Color(204, 204, 204));
+		
 		logout.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
         		System.out.println("Logging out.");
@@ -180,6 +185,7 @@ public class EmployeePanel {
 
 		// toolbar
 		toolbar.add(logout);
+		toolbar.setBackground(new Color(49, 128, 159));
 		
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridx = 0;
@@ -188,8 +194,7 @@ public class EmployeePanel {
 		constraints.weightx = 1.0;
 		constraints.weighty = .2;
 		
-		toolbar.setPreferredSize(new Dimension(1080, 50));
-
+		toolbar.setPreferredSize(new Dimension(window.getWidth(), 35));
 		organizedPanel.add(toolbar, constraints);
 		
 		constraints.weightx = .5;
@@ -201,6 +206,7 @@ public class EmployeePanel {
 		constraints.gridx = 0;
 		constraints.gridy = 2;
 		constraints.gridwidth = 2;
+		
 		organizedPanel.add(hours, constraints);
 
 		
@@ -437,7 +443,7 @@ public class EmployeePanel {
 		tableModel = new DefaultTableModel(columnNames, 0);
 		
 		table = new JTable(tableModel);
-		table.setAutoscrolls(true);
+		
 
 	}
 	
