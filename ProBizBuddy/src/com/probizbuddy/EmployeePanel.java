@@ -1,6 +1,7 @@
 package com.probizbuddy;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -174,6 +175,8 @@ public class EmployeePanel {
         		l.showPanel();
             }
         });
+		
+		
 
 		// toolbar
 		toolbar.add(logout);
@@ -184,6 +187,8 @@ public class EmployeePanel {
 		constraints.fill = GridBagConstraints.BOTH;
 		constraints.weightx = 1.0;
 		constraints.weighty = .2;
+		
+		toolbar.setPreferredSize(new Dimension(1080, 50));
 
 		organizedPanel.add(toolbar, constraints);
 		
@@ -198,6 +203,7 @@ public class EmployeePanel {
 		constraints.gridwidth = 2;
 		organizedPanel.add(hours, constraints);
 
+		
 
 		
 	    //organizedPanel.add(toolbar);

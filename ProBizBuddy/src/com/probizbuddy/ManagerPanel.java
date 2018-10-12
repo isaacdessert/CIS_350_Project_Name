@@ -36,7 +36,7 @@ public class ManagerPanel {
 		
 		ValidateAccess v = new ValidateAccess(window);
 		manager = v.getUserData("ManagersDB.txt", name);
-		mID = manager.get(0);
+		//mID = manager.get(0);
 	}
 	
 	

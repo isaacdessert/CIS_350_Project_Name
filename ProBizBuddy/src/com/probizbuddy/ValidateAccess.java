@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -151,7 +152,8 @@ public class ValidateAccess {
 			    br.close();
 			    return null;
 			} else {
-				workersList = new String(Files.readAllBytes(Paths.get(file)));
+				workersList = new String(Files.readAllBytes(Paths.get(file)), StandardCharsets.UTF_8);
+				br.close();
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -221,7 +221,7 @@ public class Login {
                 			errorLabel.setText("Please enter your password.");
                 		}
             		} else {
-            			errorLabel.setText("Please enter your assigned Employee ID.");
+            			errorLabel.setText("Please enter your first and last name.");
             		}
                 
             }

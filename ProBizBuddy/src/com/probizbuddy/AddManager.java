@@ -116,7 +116,7 @@ public class AddManager extends JPanel {
             	String passText = new String(passInput.getPassword());
             	
             		if (!nameInput.getText().equals("")) {
-            			if (!passInput.getPassword().equals("")) {
+            			if (passInput.getPassword().length > 0) {
             				setManager(nameInput.getText(), passText);
             				System.out.println("Account Created.");
                 		} else {
@@ -149,7 +149,7 @@ public class AddManager extends JPanel {
 				
 				// redirect them to their manager's panel
     				newManager.setVisible(false);
-				ManagerPanel manager = new ManagerPanel(window, mid);
+				ManagerPanel manager = new ManagerPanel(window, name);
 				manager.showPanel();
 
 			} catch (IOException e) {
