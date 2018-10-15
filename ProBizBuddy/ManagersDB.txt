@@ -1,2 +1,2 @@
-94595, Trevor West, password
+94595, Trevor West, pass
 12345, Reese Pankratz, rockfit
