@@ -187,6 +187,12 @@ public class ValidateAccess {
 				scanner.close();
 				return user;
 			}
+			
+			// id based search
+			if (user.get(0).equals(name)) { 
+				scanner.close();
+				return user;
+			}
 		}
 		scanner.close();
 		

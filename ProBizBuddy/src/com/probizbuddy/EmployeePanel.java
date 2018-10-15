@@ -165,6 +165,7 @@ public class EmployeePanel {
 		table.getTableHeader().setReorderingAllowed(false);
 		table.getTableHeader().setResizingAllowed(false);
 		
+		
 		// make toolbar
 		JButton logout = new JButton("Log Out");
 		logout.setBackground(new Color(204, 204, 204));

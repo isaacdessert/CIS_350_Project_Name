@@ -27,9 +27,10 @@ public class AddWorker {
 	
 	/** add the worker to a database.
 	 * @param name : name
+	 * @param password : password
 	 * @param wage : wage
 	 * @return the id assigned to the new employee */
-	public String setWorker(final String name, final double wage) {
+	public String setWorker(final String name, final String password, final double wage) {
 		try (FileWriter fw = new FileWriter("WorkersDB.txt", true);
 			    BufferedWriter bw = new BufferedWriter(fw);
 			    PrintWriter out = new PrintWriter(bw)) {
@@ -37,7 +38,7 @@ public class AddWorker {
 				String eid = eID.getID();
 			
 			    System.out.println(name + " added");
-				out.println(eid + ", " + name + ", " + wage);
+				out.println(eid + ", " + name + ", " + password + ", " + wage);
 				return eid;
 
 			} catch (IOException e) {

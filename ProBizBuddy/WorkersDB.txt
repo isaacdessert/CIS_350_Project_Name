@@ -1,2 +1,2 @@
-00000, John Doe, cis
-62900, Anna Mixon, gf
+00000, John Doe, cis, 11.50
+62900, Anna Mixon, gf, 12.00
