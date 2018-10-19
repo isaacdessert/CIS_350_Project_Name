@@ -409,7 +409,7 @@ public class EmployeePanel {
 			final String lineFromFile = scanner.nextLine();
 			List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
 			// id, name, password
-			if (user.get(0).equals(eID)) { 
+			if (user.get(0).equals(eID) && user.get(5).equals("false")) { 
 				// add to an arraylist of their hours
 				String data1 = user.get(1);
 			    String data2 = user.get(2);

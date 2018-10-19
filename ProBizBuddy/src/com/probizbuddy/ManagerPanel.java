@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -384,6 +386,64 @@ public class ManagerPanel {
 		table.getTableHeader().setReorderingAllowed(false);
 		table.getTableHeader().setResizingAllowed(false);
 		table.setPreferredSize(new Dimension(window.getWidth() - 325, table.getRowCount() * table.getRowHeight()));
+		
+		JButton setPaid = new JButton("Mark as Paid");
+		setPaid.setFont(buttonStyle);
+		c.gridy++;
+		payrollPanel.add(setPaid, c);
+		setPaid.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+        		// replace all the false values with true
+            	// update the database
+    			File doc = new File("TimeLogDB.txt");
+    			Scanner scanner = null;
+				try {
+					scanner = new Scanner(doc);
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+    			
+    			String tempData = "";
+
+    			while (scanner.hasNextLine()) {
+    				final String lineFromFile = scanner.nextLine();
+    				List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
+    				// id, name, password
+    				if (user.get(5).equals("false") && !user.get(3).equals("null")) { 
+    				    
+    				    String updatedLine = 
+    				    		user.get(0) + ", " + user.get(1) + ", " + user.get(2) + ", " + user.get(3) + ", " + user.get(4) + ", true";
+    				    
+				    	tempData += updatedLine;
+				    	tempData += "\n";
+
+    				} else {
+    					tempData += lineFromFile;
+    					tempData += "\n";
+    				}
+    			}
+    			
+    			// replace the file data with the value of tempData
+    			System.out.println(tempData);
+    			
+    			FileWriter workers = null;
+				try {
+					workers = new FileWriter("TimeLogDB.txt", false);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+    			try {
+					workers.write(tempData);
+	    			workers.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+    			
+    			scanner.close();
+            }
+        });
 		
 		return payrollPanel;
 	}
