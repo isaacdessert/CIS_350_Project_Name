@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -21,7 +22,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /** Main area for managers to control Pro Biz Buddy. */
@@ -34,10 +37,10 @@ public class ManagerPanel {
 	private JPanel layout, nav, dash;
 	
 	/** Optional panels to view. */
-	private JPanel overviewPanel, payrollPanel, addEmployeePanel, currentWorkersPanel;
+	private JPanel overviewPanel, payrollPanel, addEmployeePanel, currentWorkersPanel, editWorkersPanel;
 	
 	/** Navigation buttons. */
-	private JButton overview, payroll, currentWorkers, addEmployee, logout;
+	private JButton overview, payroll, currentWorkers, addEmployee, editEmployees, logout;
 	
 	/** Strings storing the manager's info. */
 	private String mID, name;
@@ -47,6 +50,9 @@ public class ManagerPanel {
 	
 	/** Format of currency. */
 	private NumberFormat currency;
+	
+	/** Totals the payroll data. */
+	private Object[] totalRowData;
 	
 	/** Style of all buttons. */
 	private Font buttonStyle = new Font("Arial", Font.PLAIN, 16);
@@ -71,6 +77,7 @@ public class ManagerPanel {
 		addEmployee();
 		payroll();
 		currentWorkers();
+		editWorkers();
 		
 		setDashComponent(overview());
 	}
@@ -141,24 +148,48 @@ public class ManagerPanel {
 		c.ipady = 5;
 		nav.add(overview, c);
 		
+
+		
+		
+		payroll = new JButton("Pay Wages");
+		payroll.setFont(buttonStyle);
+		c.gridy++;
+		nav.add(payroll, c);
+		
+
+		
+		
+		currentWorkers = new JButton("View Current Workers");
+		currentWorkers.setFont(buttonStyle);
+		c.gridy++;
+		nav.add(currentWorkers, c);
+
+
+		
+		
+		addEmployee = new JButton("Add Employee");
+		addEmployee.setFont(buttonStyle);
+		c.gridy++;
+		nav.add(addEmployee, c);
+		
+		
+		editEmployees = new JButton("Edit Employees");
+		editEmployees.setFont(buttonStyle);
+		c.gridy++;
+		nav.add(editEmployees, c);
+		
+		
 		overview.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
         		setDashComponent(overview());
             	
         		overview.setEnabled(false); overviewPanel.setVisible(true);
-            	payroll.setEnabled(true); payrollPanel.setVisible(false);
-        		currentWorkers.setEnabled(true); currentWorkersPanel.setVisible(false);
-        		addEmployee.setEnabled(true); addEmployeePanel.setVisible(false);
-            	
+            	payroll.setEnabled(true); payrollPanel.setVisible(false); payrollPanel.removeAll();
+        		currentWorkers.setEnabled(true); currentWorkersPanel.setVisible(false); currentWorkersPanel.removeAll();
+        		addEmployee.setEnabled(true); addEmployeePanel.setVisible(false); addEmployeePanel.removeAll();
+        		editEmployees.setEnabled(true); editWorkersPanel.setVisible(false); editWorkersPanel.removeAll();
             }
         });
-		
-		
-		payroll = new JButton("Pay Wages");
-		payroll.setFont(buttonStyle);
-		
-		c.gridy++;
-		nav.add(payroll, c);
 		
 		payroll.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
@@ -168,20 +199,14 @@ public class ManagerPanel {
 					e1.printStackTrace();
 				}
             	
-       			overview.setEnabled(true); overviewPanel.setVisible(false);
+       			overview.setEnabled(true); overviewPanel.setVisible(false); overviewPanel.removeAll();
         		payroll.setEnabled(false); payrollPanel.setVisible(true);
-        		currentWorkers.setEnabled(true); currentWorkersPanel.setVisible(false);
-        		addEmployee.setEnabled(true); addEmployeePanel.setVisible(false);
+        		currentWorkers.setEnabled(true); currentWorkersPanel.setVisible(false); currentWorkersPanel.removeAll();
+        		addEmployee.setEnabled(true); addEmployeePanel.setVisible(false); addEmployeePanel.removeAll();
+        		editEmployees.setEnabled(true); editWorkersPanel.setVisible(false); editWorkersPanel.removeAll();
             }
         });
 		
-		
-		currentWorkers = new JButton("View Current Workers");
-		currentWorkers.setFont(buttonStyle);
-		
-		c.gridy++;
-		nav.add(currentWorkers, c);
-
 		currentWorkers.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
             	try {
@@ -190,29 +215,39 @@ public class ManagerPanel {
 					e1.printStackTrace();
 				}
             	
-            	overview.setEnabled(true); overviewPanel.setVisible(false);
-            	payroll.setEnabled(true); payrollPanel.setVisible(false);
+            	overview.setEnabled(true); overviewPanel.setVisible(false); overviewPanel.removeAll();
+            	payroll.setEnabled(true); payrollPanel.setVisible(false); payrollPanel.removeAll();
         		currentWorkers.setEnabled(false); currentWorkersPanel.setVisible(true);
-        		addEmployee.setEnabled(true); addEmployeePanel.setVisible(false);
+        		addEmployee.setEnabled(true); addEmployeePanel.setVisible(false); addEmployeePanel.removeAll();
+        		editEmployees.setEnabled(true); editWorkersPanel.setVisible(false); editWorkersPanel.removeAll();
             }
         });
 		
-		
-		addEmployee = new JButton("Add Employee");
-		addEmployee.setFont(buttonStyle);
-		
-		c.gridy++;
-		nav.add(addEmployee, c);
-
 		addEmployee.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
             	setDashComponent(addEmployee());
             	
-            	overview.setEnabled(true); overviewPanel.setVisible(false);
-            	payroll.setEnabled(true); payrollPanel.setVisible(false);
-        		currentWorkers.setEnabled(true); currentWorkersPanel.setVisible(false);
+            	overview.setEnabled(true); overviewPanel.setVisible(false); overviewPanel.removeAll();
+            	payroll.setEnabled(true); payrollPanel.setVisible(false); payrollPanel.removeAll();
+        		currentWorkers.setEnabled(true); currentWorkersPanel.setVisible(false); currentWorkersPanel.removeAll();
         		addEmployee.setEnabled(false); addEmployeePanel.setVisible(true);
-        		
+        		editEmployees.setEnabled(true); editWorkersPanel.setVisible(false); editWorkersPanel.removeAll();
+            }
+        });
+		
+		editEmployees.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+            	try {
+					setDashComponent(editWorkers());
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+            	
+            	overview.setEnabled(true); overviewPanel.setVisible(false); overviewPanel.removeAll();
+            	payroll.setEnabled(true); payrollPanel.setVisible(false); payrollPanel.removeAll();
+        		currentWorkers.setEnabled(true); currentWorkersPanel.setVisible(false); currentWorkersPanel.removeAll();
+        		addEmployee.setEnabled(true); addEmployeePanel.setVisible(false); addEmployeePanel.removeAll();
+        		editEmployees.setEnabled(false); editWorkersPanel.setVisible(true); 
             }
         });
 		
@@ -364,8 +399,11 @@ public class ManagerPanel {
 			totalHours += "" + totalMins + " Ms";
 		}
 		
-		Object[] totalRowData = new Object[] {"TOTALS:", null, null, null, totalHours, null, currency.format(totalPayout)};
-		tableModel.addRow(totalRowData);
+		
+		if (totalHours != null && totalPayout != 0.00) {
+			totalRowData = new Object[] {"TOTALS:", null, null, null, totalHours, null, currency.format(totalPayout)};
+			tableModel.addRow(totalRowData);
+		}
 
 		
 		// hours table header
@@ -387,10 +425,23 @@ public class ManagerPanel {
 		table.getTableHeader().setResizingAllowed(false);
 		table.setPreferredSize(new Dimension(window.getWidth() - 325, table.getRowCount() * table.getRowHeight()));
 		
+		
 		JButton setPaid = new JButton("Mark as Paid");
 		setPaid.setFont(buttonStyle);
 		c.gridy++;
 		payrollPanel.add(setPaid, c);
+		
+		if (totalHours == null || totalPayout == 0.00) {
+			setPaid.setVisible(false);
+			setPaid.setEnabled(false);
+			
+			JLabel allPaidLabel = new JLabel();
+			allPaidLabel.setText("Payroll is up-to-date.");
+			allPaidLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
+			c.gridy++;
+			payrollPanel.add(allPaidLabel, c);
+		}
+		
 		setPaid.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
         		// replace all the false values with true
@@ -442,6 +493,16 @@ public class ManagerPanel {
 				}
     			
     			scanner.close();
+           
+    			// refresh the panel
+    			payrollPanel.removeAll();
+    			try {
+					setDashComponent(payroll());
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+    			payrollPanel.revalidate();
+    			payrollPanel.repaint();
             }
         });
 		
@@ -456,11 +517,56 @@ public class ManagerPanel {
 		
 		addEmployeePanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
 		
 		JLabel formLabel = new JLabel();
 		formLabel.setText("Have the employee fill out this form:");
 		formLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
-		addEmployeePanel.add(formLabel);
+		c.gridx = 0;
+		c.gridy = 0;
+		addEmployeePanel.add(formLabel, c);
+		
+		JLabel nameLabel = new JLabel();
+		nameLabel.setText("Name: ");
+		c.gridx = 0;
+		c.gridy++;
+		nameLabel.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
+		addEmployeePanel.add(nameLabel, c);
+		
+		JTextField empName = new JTextField(15); 
+		empName.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
+		c.gridx = 1;
+		c.gridy++;
+		addEmployeePanel.add(empName, c);
+		
+		JLabel passwordLabel = new JLabel();
+		passwordLabel.setText("Password: ");
+		c.gridx = 0;
+		c.gridy++;
+		passwordLabel.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
+		addEmployeePanel.add(passwordLabel, c);
+		
+		JPasswordField empPass = new JPasswordField(15); 
+		empPass.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
+		c.gridx = 1;
+		c.gridy++;
+		addEmployeePanel.add(empPass, c);
+		
+		JButton createEmployee = new JButton("Create New Employee");
+		createEmployee.setFont(buttonStyle);
+		c.gridx = 1;
+		c.gridy++;
+		createEmployee.setMargin(new Insets(5, 5, 5, 5));
+		addEmployeePanel.add(createEmployee, c);
+		
+		createEmployee.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+            	 String password = String.valueOf(empPass.getPassword());
+            	
+        		AddWorker newEmp = new AddWorker();
+        		newEmp.setWorker(empName.getText(), password, 0.00);
+            }
+        });
 		
 		return addEmployeePanel;
 	}
@@ -480,6 +586,53 @@ public class ManagerPanel {
 		File doc = new File("TimeLogDB.txt");
 		final Scanner scanner = new Scanner(doc);
 		
+		 if (doc.length() > 0) {
+		
+			while (scanner.hasNextLine()) {
+				final String lineFromFile = scanner.nextLine();
+				List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
+			    
+			    // only show all unpaid, completed time logs
+			    if (user.get(3).equals("null")) {
+				    List<String> thisEmployee = v.getUserData("WorkersDB.txt", user.get(0));
+				    String employeeName = thisEmployee.get(1);
+				    
+			    	employeesClockedIn += employeeName + ", ";
+			    }
+			}
+			
+			scanner.close();
+			
+			JLabel clockedInLabel = new JLabel();
+			clockedInLabel.setText("Current Employees Clocked In: " + employeesClockedIn.substring(0, employeesClockedIn.length() - 2));
+			clockedInLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
+			currentWorkersPanel.add(clockedInLabel);
+		 } else {
+			 JLabel clockedInLabel = new JLabel();
+			 clockedInLabel.setText("There are currently no employees. Please add one.");
+			 clockedInLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
+			 currentWorkersPanel.add(clockedInLabel);
+		 }	
+		
+		return currentWorkersPanel;
+	}
+	
+	
+	/** Edit employee info.
+	 * @return panel to show
+	 * @throws FileNotFoundException */
+	private JPanel editWorkers() throws FileNotFoundException {
+		editWorkersPanel = new JPanel();
+		ValidateAccess v = new ValidateAccess();
+		
+		editWorkersPanel.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		
+		String employeesClockedIn = "";
+		
+		File doc = new File("TimeLogDB.txt");
+		final Scanner scanner = new Scanner(doc);
+		
 		while (scanner.hasNextLine()) {
 			final String lineFromFile = scanner.nextLine();
 			List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
@@ -487,20 +640,17 @@ public class ManagerPanel {
 		    // only show all unpaid, completed time logs
 		    if (user.get(3).equals("null")) {
 			    List<String> thisEmployee = v.getUserData("WorkersDB.txt", user.get(0));
-			    String employeeName = thisEmployee.get(1);
 			    
-		    	employeesClockedIn += employeeName + ", ";
 		    }
 		}
 		
 		scanner.close();
 		
 		JLabel clockedInLabel = new JLabel();
-		clockedInLabel.setText("Current Employees Clocked In: " + employeesClockedIn.substring(0, employeesClockedIn.length() - 2));
+		clockedInLabel.setText("Edit employee info:");
 		clockedInLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
 		currentWorkersPanel.add(clockedInLabel);
 		
-		return currentWorkersPanel;
+		return editWorkersPanel;
 	}
-	
 }

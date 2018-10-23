@@ -12,6 +12,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,18 +28,25 @@ public class AddManager extends JPanel {
 	private JFrame window;
 	
 	/** fields to add a manager. */
-	private JTextField nameInput, passInput;
+	private JTextField nameInput;
+	
+	/** Input fields. */
+	private JPasswordField passInput;
+	
+	/** Show errors to the user. */
+	private JLabel errorLabel;
 	
 	/** add manager button. */
 	private JButton login;
 	
 	/** holds fields for adding a manager. */
-	private JPanel newManager = new JPanel();
+	private JPanel newManager;
 	
 	/** Constructor for adding to the window.
 	 * @param pWindow : window */
 	AddManager(final JFrame pWindow) {
 		window = pWindow;
+		newManager = new JPanel();
 	}
 	
 	
@@ -63,7 +72,7 @@ public class AddManager extends JPanel {
 		titleLabel.setHorizontalAlignment(JLabel.CENTER);
 		newManager.add(titleLabel, c);
 		
-		JLabel errorLabel = new JLabel();
+		errorLabel = new JLabel();
 		errorLabel.setText("");
 		c.gridx = 1;
 		c.gridy = 1;
@@ -81,7 +90,7 @@ public class AddManager extends JPanel {
 		nameLabel.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
 		newManager.add(nameLabel, c);
 		
-		JTextField nameInput = new JTextField(5);
+		nameInput = new JTextField(5);
 		c.gridx = 2;
 		c.gridy = 2;
 		c.gridwidth = 2;
@@ -95,7 +104,7 @@ public class AddManager extends JPanel {
 		passwordLabel.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
 		newManager.add(passwordLabel, c);
 		
-		JPasswordField passInput = new JPasswordField(15);
+		passInput = new JPasswordField(15);
 		c.gridx = 2;
 		c.gridy = 3;
 		c.gridwidth = 2;
@@ -112,25 +121,50 @@ public class AddManager extends JPanel {
 		login.addActionListener(new ActionListener() {
 			 
             public void actionPerformed(final ActionEvent e) {
-            	
-            	String passText = new String(passInput.getPassword());
-            	
-            		if (!nameInput.getText().equals("")) {
-            			if (passInput.getPassword().length > 0) {
-            				setManager(nameInput.getText(), passText);
-            				System.out.println("Account Created.");
-                		} else {
-                			errorLabel.setText("Please enter a password.");
-                		}
-            		} else {
-            			errorLabel.setText("Please enter a first and last name.");
-            		}
-                
+            	createManager();
             }
         });
 		
-		window.getContentPane().add(newManager);
+		// allow pressing enter to attempt sign in
+		@SuppressWarnings("serial")
+		Action action = new AbstractAction() {
+		    @Override
+		    public void actionPerformed(final ActionEvent e) {
+		    	System.out.println("Attempting account creation..");
+		    	createManager();
+		    }
+		};
 		
+		passInput.addActionListener(action);
+		
+		
+		if (window != null) {
+			window.getContentPane().add(newManager);
+		} else {
+			System.out.println("window is null");
+		}
+		
+	}
+	
+	
+	/** Create a manager account.
+	 * @return whether it was done successfully. */
+	private boolean createManager() {
+		String passText = new String(passInput.getPassword());
+    	
+		if (!nameInput.getText().equals("")) {
+			if (passInput.getPassword().length > 0) {
+				setManager(nameInput.getText(), passText);
+				System.out.println("Account Created.");
+				return true;
+    		} else {
+    			errorLabel.setText("Please enter a password.");
+    		}
+		} else {
+			errorLabel.setText("Please enter a first and last name.");
+		}
+		
+		return false;
 	}
 	
 	/** add the manager to the database.
@@ -144,16 +178,17 @@ public class AddManager extends JPanel {
 				GenerateID mID = new GenerateID();
 				String mid = mID.getID();
 				
+				
 			    System.out.println(name + " added");
 				out.println(mid + ", " + name + ", " + password);
 				
 				// redirect them to their manager's panel
-    				newManager.setVisible(false);
+    			newManager.setVisible(false);
 				ManagerPanel manager = new ManagerPanel(window, name);
 				manager.showPanel();
 
 			} catch (IOException e) {
-			    //exception handling left as an exercise for the reader
+				e.getStackTrace();
 			}
 		
 		

@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -31,6 +33,9 @@ public class Login {
 	
 	/** sign in button. */
 	private JButton signin;
+	
+	/** Show errors to user on GUI. */
+	private JLabel errorLabel;
 	
 	/** text field for user or employee id. */
 	private JTextField nameInput;
@@ -135,7 +140,7 @@ public class Login {
 		titleLabel.setHorizontalAlignment(JLabel.CENTER);
 		login.add(titleLabel, c);
 		
-		JLabel errorLabel = new JLabel();
+		errorLabel = new JLabel();
 		errorLabel.setText("");
 		c.gridx = 1;
 		c.gridy = 1;
@@ -167,12 +172,24 @@ public class Login {
 		passwordLabel.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
 		login.add(passwordLabel, c);
 		
+		// allow pressing enter to attempt sign in
+		@SuppressWarnings("serial")
+		Action action = new AbstractAction() {
+		    @Override
+		    public void actionPerformed(final ActionEvent e) {
+		    	System.out.println("Attempting sign in..");
+		        signIn();
+		    }
+		};
+		
 		passInput = new JPasswordField(15);
 		c.gridx = 2;
 		c.gridy = 3;
 		c.gridwidth = 2;
 		passInput.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
 		login.add(passInput, c);
+		
+		passInput.addActionListener(action);
 		
 		signin = new JButton("Sign In");
 		c.gridx = 2;
@@ -186,47 +203,59 @@ public class Login {
 			// if the sign in button was pushed
             public void actionPerformed(final ActionEvent e) {
             	
-            		if (!nameInput.getText().equals("")) {
-            			if (!(passInput.getPassword().length == 0)) {
-            				
-            				// see if the entry matches something in the database
-            				System.out.println("Comparing info with database.");
-            				
-            				try {
-            					String passText = new String(passInput.getPassword());
-            					
-            					if (validateCredentials(nameInput.getText(), passText)) {
-									
-									// determine whether they are an employee or manager
-									// manager
-									if (isManager) {
-										ManagerPanel employee = new ManagerPanel(window, nameInput.getText());
-										login.setVisible(false); //hide the log in panel
-										employee.showPanel();
-									} else {
-										// employee
-										EmployeePanel employee = new EmployeePanel(window, nameInput.getText());
-										login.setVisible(false); //hide the log in panel
-										employee.showPanel();
-									}
-								} else {
-									errorLabel.setText("Incorrect credentials. Try again.");
-								}
-							} catch (FileNotFoundException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-            				
-                		} else {
-                			errorLabel.setText("Please enter your password.");
-                		}
-            		} else {
-            			errorLabel.setText("Please enter your first and last name.");
-            		}
+            	signIn();
                 
             }
         });
 		
 		window.getContentPane().add(login);
+	}
+	
+	
+	private boolean signIn() {
+		
+		if (!nameInput.getText().equals("")) {
+			if (!(passInput.getPassword().length == 0)) {
+				
+				// see if the entry matches something in the database
+				System.out.println("Comparing info with database.");
+				
+				try {
+					String passText = new String(passInput.getPassword());
+					
+					if (validateCredentials(nameInput.getText(), passText)) {
+						
+						// determine whether they are an employee or manager
+						// manager
+						if (isManager) {
+							ManagerPanel employee = new ManagerPanel(window, nameInput.getText());
+							login.setVisible(false); //hide the log in panel
+							employee.showPanel();
+							
+							return true;
+						} else {
+							// employee
+							EmployeePanel employee = new EmployeePanel(window, nameInput.getText());
+							login.setVisible(false); //hide the log in panel
+							employee.showPanel();
+							
+							return true;
+						}
+					} else {
+						errorLabel.setText("Incorrect credentials. Try again.");
+					}
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+    		} else {
+    			errorLabel.setText("Please enter your password.");
+    		}
+		} else {
+			errorLabel.setText("Please enter your first and last name.");
+		}
+		
+		return false;
 	}
 }
