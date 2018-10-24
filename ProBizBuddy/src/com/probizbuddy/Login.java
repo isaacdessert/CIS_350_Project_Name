@@ -68,7 +68,7 @@ public class Login {
 	public boolean userFound(final String file, final String name, final String pass) 
 			throws FileNotFoundException {
 		File doc = new File(file);
-		final Scanner scanner = new Scanner(doc);
+		final Scanner scanner = new Scanner(doc, "UTF-8");
 		System.out.println("Searching DB for user");
 		while (scanner.hasNextLine()) {
 		   final String lineFromFile = scanner.nextLine();
@@ -211,7 +211,8 @@ public class Login {
 		window.getContentPane().add(login);
 	}
 	
-	
+	/** Performs the sign in operation. Allows users account access.
+	 *  @return whether sign in was successful. */
 	private boolean signIn() {
 		
 		if (!nameInput.getText().equals("")) {
@@ -245,7 +246,6 @@ public class Login {
 						errorLabel.setText("Incorrect credentials. Try again.");
 					}
 				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				

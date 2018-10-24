@@ -114,7 +114,7 @@ public class EmployeePanel {
             public void actionPerformed(final ActionEvent e) {
             		try {
 						clockIn();
-					} catch (FileNotFoundException e1) {
+					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
             }
@@ -267,8 +267,8 @@ public class EmployeePanel {
 	
 	/** User still clocks in.
 	 *  Makes sure the user has previously clocked out. 
-	 * @throws FileNotFoundException */
-	private void clockIn() throws FileNotFoundException {
+	 * @throws IOException */
+	private void clockIn() throws IOException {
 		
 		// add the time to the database
 	    SimpleDateFormat formattedDate = new SimpleDateFormat("MM-dd-yyyy");
@@ -301,84 +301,81 @@ public class EmployeePanel {
 	 * @throws ParseException 
 	 * @throws IOException */
 	private void clockOut() throws ParseException, IOException {
+		// replace that value in the text file
+		System.out.println("Replacing null with current time.");
 		
+		String time1 = tableModel.getValueAt(tableModel.getRowCount() - 1, 1).toString();
 		
-			// replace that value in the text file
-			System.out.println("Replacing null with current time.");
-			
-			String time1 = tableModel.getValueAt(tableModel.getRowCount() - 1, 1).toString();
-			
-		    SimpleDateFormat formattedTime = new SimpleDateFormat("hh:mm a"); // ad :ss for seconds too
-		    String time2 = formattedTime.format(new Date());
-			
-			Date date1 = formattedTime.parse(time1);
-			Date date2 = formattedTime.parse(time2);
-			
-			long totalSecs = date2.getTime() - date1.getTime();
-			
-			totalSecs /= 1000;
-			
-			long hours = (totalSecs / 3600);
-	        long mins = (totalSecs / 60) % 60;
-
-			System.out.println("Hours: " + hours);
-			System.out.println("Minutes: " + mins);
-			
-			String timeDifference = "";
-			
-			if (hours > 0) {
-				if (hours == 1) {
-					timeDifference += "1 Hour ";
-				} else if (hours > 1) {
-					timeDifference += "" + hours + " Hours ";
-				}
-			}
-			
-			if (mins > 0) {
-				if (mins == 1) {
-					timeDifference += "1 Minute";
-				} else if (mins > 1) {
-					timeDifference += "" + mins + " Minutes";
-				}
-			}
-			
-
-			// update the database
-			File doc = new File("TimeLogDB.txt");
-			final Scanner scanner = new Scanner(doc);
-			
-			String tempData = "";
-
-			while (scanner.hasNextLine()) {
-				final String lineFromFile = scanner.nextLine();
-				List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
-				// id, name, password
-				if (user.get(0).equals(eID) && user.get(3).equals("null")) { 
-				    
-				    String updatedLine = 
-				    		user.get(0) + ", " + user.get(1) + ", " + user.get(2) + ", " + time2 + ", " + timeDifference + ", false";
-				    
-				    
-				    if (!timeDifference.equals("")) {
-				    	tempData += updatedLine;
-				    	tempData += "\n";
-				    }
-
-				} else {
-					tempData += lineFromFile;
-					tempData += "\n";
-				}
-			}
-			
-			// replace the file data with the value of tempData
-			System.out.println(tempData);
-			
-			FileWriter workers = new FileWriter("TimeLogDB.txt", false);
-			workers.write(tempData);
-			workers.close();
-			
-			scanner.close();
+	    SimpleDateFormat formattedTime = new SimpleDateFormat("hh:mm a"); // ad :ss for seconds too
+	    String time2 = formattedTime.format(new Date());
 		
+		Date date1 = formattedTime.parse(time1);
+		Date date2 = formattedTime.parse(time2);
+		
+		long totalSecs = date2.getTime() - date1.getTime();
+		
+		totalSecs /= 1000;
+		
+		long hours = (totalSecs / 3600);
+        long mins = (totalSecs / 60) % 60;
+
+		System.out.println("Hours: " + hours);
+		System.out.println("Minutes: " + mins);
+		
+		String timeDifference = "";
+		
+		if (hours > 0) {
+			if (hours == 1) {
+				timeDifference += "1 Hour ";
+			} else if (hours > 1) {
+				timeDifference += "" + hours + " Hours ";
+			}
+		}
+		
+		if (mins > 0) {
+			if (mins == 1) {
+				timeDifference += "1 Minute";
+			} else if (mins > 1) {
+				timeDifference += "" + mins + " Minutes";
+			}
+		}
+		
+
+		// update the database
+		File doc = new File("TimeLogDB.txt");
+		final Scanner scanner = new Scanner(doc, "UTF-8");
+		
+		String tempData = "";
+
+		while (scanner.hasNextLine()) {
+			final String lineFromFile = scanner.nextLine();
+			List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
+			// id, name, password
+			if (user.get(0).equals(eID) && user.get(3).equals("null")) { 
+			    
+			    String updatedLine = 
+			    		user.get(0) + ", " + user.get(1) + ", " + user.get(2) + ", " + time2 + ", " + timeDifference + ", false";
+			    
+			    
+			    if (!timeDifference.equals("")) {
+			    	tempData += updatedLine;
+			    	tempData += "\n";
+			    }
+
+			} else {
+				tempData += lineFromFile;
+				tempData += "\n";
+			}
+		}
+		
+		// replace the file data with the value of tempData
+		System.out.println(tempData);
+		
+		FileWriter workers = new FileWriter("TimeLogDB.txt", false);
+		workers.write(tempData);
+		workers.close();
+		
+		scanner.close();
 		
 		
 		// refresh after the entry is updated
@@ -393,7 +390,7 @@ public class EmployeePanel {
 	public void fillTable() throws FileNotFoundException {
 		// only add data from this user
 		File doc = new File("TimeLogDB.txt");
-		final Scanner scanner = new Scanner(doc);
+		final Scanner scanner = new Scanner(doc, "UTF-8");
 		
 		//wipe the current table
 		int rowCount = tableModel.getRowCount();

@@ -7,10 +7,13 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -22,6 +25,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 /** Add a manager to the database. */
+@SuppressWarnings("serial")
 public class AddManager extends JPanel {
 	
 	/** window. */
@@ -121,17 +125,28 @@ public class AddManager extends JPanel {
 		login.addActionListener(new ActionListener() {
 			 
             public void actionPerformed(final ActionEvent e) {
-            	createManager();
+            	try {
+					createManager();
+				} catch (UnsupportedEncodingException e1) {
+					e1.printStackTrace();
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
             }
         });
 		
 		// allow pressing enter to attempt sign in
-		@SuppressWarnings("serial")
 		Action action = new AbstractAction() {
 		    @Override
 		    public void actionPerformed(final ActionEvent e) {
 		    	System.out.println("Attempting account creation..");
-		    	createManager();
+		    	try {
+					createManager();
+				} catch (UnsupportedEncodingException e1) {
+					e1.printStackTrace();
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
 		    }
 		};
 		
@@ -148,8 +163,10 @@ public class AddManager extends JPanel {
 	
 	
 	/** Create a manager account.
-	 * @return whether it was done successfully. */
-	private boolean createManager() {
+	 * @return whether it was done successfully. 
+	 * @throws FileNotFoundException 
+	 * @throws UnsupportedEncodingException */
+	private boolean createManager() throws UnsupportedEncodingException, FileNotFoundException {
 		String passText = new String(passInput.getPassword());
     	
 		if (!nameInput.getText().equals("")) {
@@ -169,29 +186,25 @@ public class AddManager extends JPanel {
 	
 	/** add the manager to the database.
 	 * @param name : manager's name
-	 * @param password : password */
-	public void setManager(final String name, final String password) {
-		try (FileWriter fw = new FileWriter("ManagersDB.txt", true);
-			    BufferedWriter bw = new BufferedWriter(fw);
-				
-		    PrintWriter out = new PrintWriter(bw)) {
-				GenerateID mID = new GenerateID();
-				String mid = mID.getID();
-				
-				
-			    System.out.println(name + " added");
-				out.println(mid + ", " + name + ", " + password);
-				
-				// redirect them to their manager's panel
-    			newManager.setVisible(false);
-				ManagerPanel manager = new ManagerPanel(window, name);
-				manager.showPanel();
-
-			} catch (IOException e) {
-				e.getStackTrace();
-			}
+	 * @param password : password 
+	 * @throws FileNotFoundException 
+	 * @throws UnsupportedEncodingException */
+	public void setManager(final String name, final String password) throws UnsupportedEncodingException, FileNotFoundException {
+		File file = new File("ManagersDB.txt");
+		Writer w = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+		PrintWriter pw = new PrintWriter(w);
+	
+		GenerateID mID = new GenerateID();
+		String mid = mID.getID();
 		
+	    System.out.println(name + " added");
+	    pw.println(mid + ", " + name + ", " + password);
 		
+		// redirect them to their manager's panel
+		newManager.setVisible(false);
+		ManagerPanel manager = new ManagerPanel(window, name);
+		manager.showPanel();
 		
+		pw.close();
 	}
 }

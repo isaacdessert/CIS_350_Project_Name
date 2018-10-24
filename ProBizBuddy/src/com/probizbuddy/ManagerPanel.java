@@ -43,16 +43,16 @@ public class ManagerPanel {
 	private JButton overview, payroll, currentWorkers, addEmployee, editEmployees, logout;
 	
 	/** Strings storing the manager's info. */
-	private String mID, name;
-	
-	/** Manager list from db. */
-	private List<String> manager;
+	private String name;
 	
 	/** Format of currency. */
 	private NumberFormat currency;
 	
 	/** Totals the payroll data. */
 	private Object[] totalRowData;
+	
+	/** Writes files. */
+	private FileWriter workers;
 	
 	/** Style of all buttons. */
 	private Font buttonStyle = new Font("Arial", Font.PLAIN, 16);
@@ -69,10 +69,6 @@ public class ManagerPanel {
 		
 		name = pName;
 		
-		ValidateAccess v = new ValidateAccess(window);
-		manager = v.getUserData("ManagersDB.txt", name);
-		//mID = manager.get(0);
-		
 		// set up all components
 		addEmployee();
 		payroll();
@@ -88,8 +84,6 @@ public class ManagerPanel {
 		System.out.println("Logged in, show the manager's panel.");
 		
 		layout.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.HORIZONTAL;
 		
 		 displayNav();
 		 displayDashboard();
@@ -159,7 +153,7 @@ public class ManagerPanel {
 
 		
 		
-		currentWorkers = new JButton("View Current Workers");
+		currentWorkers = new JButton("Currently Working");
 		currentWorkers.setFont(buttonStyle);
 		c.gridy++;
 		nav.add(currentWorkers, c);
@@ -175,6 +169,7 @@ public class ManagerPanel {
 		
 		editEmployees = new JButton("Edit Employees");
 		editEmployees.setFont(buttonStyle);
+		c.insets = new Insets(0, 0, 125, 0);
 		c.gridy++;
 		nav.add(editEmployees, c);
 		
@@ -255,6 +250,7 @@ public class ManagerPanel {
 		logout = new JButton("Log Out");
 		logout.setFont(buttonStyle);
 		
+		c.insets = new Insets(70, 0, 25, 0);
 		c.gridy++;
 		nav.add(logout, c);
 		
@@ -290,7 +286,7 @@ public class ManagerPanel {
 		JLabel userLabel = new JLabel();
 		userLabel.setText("Welcome, " + name);
 		userLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
-		overviewPanel.add(userLabel);
+		overviewPanel.add(userLabel, c);
 		
 		return overviewPanel;
 	}
@@ -316,7 +312,7 @@ public class ManagerPanel {
 		DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
 		JTable table = new JTable(tableModel);
 		File doc = new File("TimeLogDB.txt");
-		final Scanner scanner = new Scanner(doc);
+		final Scanner scanner = new Scanner(doc, "UTF-8");
 		
 		//wipe the current table
 		int rowCount = tableModel.getRowCount();
@@ -431,7 +427,7 @@ public class ManagerPanel {
 		c.gridy++;
 		payrollPanel.add(setPaid, c);
 		
-		if (totalHours == null || totalPayout == 0.00) {
+		if (totalPayout == 0.00) {
 			setPaid.setVisible(false);
 			setPaid.setEnabled(false);
 			
@@ -449,50 +445,64 @@ public class ManagerPanel {
     			File doc = new File("TimeLogDB.txt");
     			Scanner scanner = null;
 				try {
-					scanner = new Scanner(doc);
+					scanner = new Scanner(doc, "UTF-8");
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
 				}
     			
     			String tempData = "";
 
-    			while (scanner.hasNextLine()) {
-    				final String lineFromFile = scanner.nextLine();
-    				List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
-    				// id, name, password
-    				if (user.get(5).equals("false") && !user.get(3).equals("null")) { 
-    				    
-    				    String updatedLine = 
-    				    		user.get(0) + ", " + user.get(1) + ", " + user.get(2) + ", " + user.get(3) + ", " + user.get(4) + ", true";
-    				    
-				    	tempData += updatedLine;
-				    	tempData += "\n";
-
-    				} else {
-    					tempData += lineFromFile;
-    					tempData += "\n";
-    				}
+    			if (scanner != null) {
+	    			while (scanner.hasNextLine()) {
+	    				final String lineFromFile = scanner.nextLine();
+	    				List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
+	    				// id, name, password
+	    				if (user.get(5).equals("false") && !user.get(3).equals("null")) { 
+	    				    
+	    				    String updatedLine = 
+	    				    		user.get(0) + ", " + user.get(1) + ", " + user.get(2) + ", " + user.get(3) + ", " + user.get(4) + ", true";
+	    				    
+					    	tempData += updatedLine;
+					    	tempData += "\n";
+	
+	    				} else {
+	    					tempData += lineFromFile;
+	    					tempData += "\n";
+	    				}
+	    			}
+    			
+    			
+	    			// replace the file data with the value of tempData
+	    			System.out.println(tempData);
+	    			
+	    			
+					try {
+						workers = new FileWriter("TimeLogDB.txt", false);
+	
+						if (tempData != null) {
+							workers.write(tempData);
+						}
+						
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					} finally {
+					    if (workers != null) {
+					        try {
+					        	workers.flush();                
+					        } catch (IOException e1) {
+					            e1.printStackTrace();
+					        }
+					        try {
+					        	workers.close();
+					        } catch (IOException e1) {
+					            e1.printStackTrace();
+					        }
+					    }
+					}
+	    			
+	
+	    			scanner.close();
     			}
-    			
-    			// replace the file data with the value of tempData
-    			System.out.println(tempData);
-    			
-    			FileWriter workers = null;
-				try {
-					workers = new FileWriter("TimeLogDB.txt", false);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-    			try {
-					workers.write(tempData);
-	    			workers.close();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-    			
-    			scanner.close();
            
     			// refresh the panel
     			payrollPanel.removeAll();
@@ -525,6 +535,12 @@ public class ManagerPanel {
 		c.gridx = 0;
 		c.gridy = 0;
 		addEmployeePanel.add(formLabel, c);
+		
+		JLabel statusLabel = new JLabel();
+		statusLabel.setText("\n");
+		statusLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
+		c.gridy++;
+		addEmployeePanel.add(statusLabel, c);
 		
 		JLabel nameLabel = new JLabel();
 		nameLabel.setText("Name: ");
@@ -565,6 +581,12 @@ public class ManagerPanel {
             	
         		AddWorker newEmp = new AddWorker();
         		newEmp.setWorker(empName.getText(), password, 0.00);
+        		
+        		statusLabel.setText(empName.getText() + " successfully added.");
+        		
+        		// reset the fields
+        		empName.setText("");
+        		empPass.setText("");
             }
         });
 		
@@ -583,35 +605,51 @@ public class ManagerPanel {
 		
 		String employeesClockedIn = "";
 		
-		File doc = new File("TimeLogDB.txt");
-		final Scanner scanner = new Scanner(doc);
+		File workersDB = new File("WorkersDB.txt");
 		
-		 if (doc.length() > 0) {
+		File timeDB = new File("TimeLogDB.txt");
+		final Scanner scanner = new Scanner(timeDB, "UTF-8");
 		
-			while (scanner.hasNextLine()) {
-				final String lineFromFile = scanner.nextLine();
-				List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
-			    
-			    // only show all unpaid, completed time logs
-			    if (user.get(3).equals("null")) {
-				    List<String> thisEmployee = v.getUserData("WorkersDB.txt", user.get(0));
-				    String employeeName = thisEmployee.get(1);
-				    
-			    	employeesClockedIn += employeeName + ", ";
-			    }
+		if (workersDB.length() > 0) {
+			if (timeDB.length() > 0) {
+				while (scanner.hasNextLine()) {
+					final String lineFromFile = scanner.nextLine();
+					List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
+				
+					// only show all unpaid, completed time logs
+					if (user.get(3).equals("null")) {
+						List<String> thisEmployee = v.getUserData("WorkersDB.txt", user.get(0));
+						String employeeName = thisEmployee.get(1);
+						
+						employeesClockedIn += employeeName + ", ";
+				    }
+				}
+				
+				scanner.close();
+				
+				if (!employeesClockedIn.equals("")) {
+					JLabel clockedInLabel = new JLabel();
+					clockedInLabel.setText("Current Employees Clocked In: " + employeesClockedIn.substring(0, employeesClockedIn.length() - 2));
+					clockedInLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
+					currentWorkersPanel.add(clockedInLabel, c);
+				} else {
+					JLabel clockedInLabel = new JLabel();
+					clockedInLabel.setText("There are no employees clocked in.");
+					clockedInLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
+					currentWorkersPanel.add(clockedInLabel, c);
+				}
+				
+			} else {
+				JLabel clockedInLabel = new JLabel();
+				clockedInLabel.setText("There are no employees clocked in.");
+				clockedInLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
+				currentWorkersPanel.add(clockedInLabel, c);
 			}
-			
-			scanner.close();
-			
-			JLabel clockedInLabel = new JLabel();
-			clockedInLabel.setText("Current Employees Clocked In: " + employeesClockedIn.substring(0, employeesClockedIn.length() - 2));
-			clockedInLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
-			currentWorkersPanel.add(clockedInLabel);
 		 } else {
 			 JLabel clockedInLabel = new JLabel();
 			 clockedInLabel.setText("There are currently no employees. Please add one.");
 			 clockedInLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
-			 currentWorkersPanel.add(clockedInLabel);
+			 currentWorkersPanel.add(clockedInLabel, c);
 		 }	
 		
 		return currentWorkersPanel;
@@ -628,28 +666,42 @@ public class ManagerPanel {
 		editWorkersPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
-		String employeesClockedIn = "";
+
 		
-		File doc = new File("TimeLogDB.txt");
-		final Scanner scanner = new Scanner(doc);
+		String[] columnNames = {
+				"Name",
+				"Password",
+                "Wage"
+                };
 		
+		// fill a multidimensional array with a loop from the database
+
+		DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+		JTable table = new JTable(tableModel);
+		File doc = new File("WorkersDB.txt");
+		final Scanner scanner = new Scanner(doc, "UTF-8");
+
 		while (scanner.hasNextLine()) {
 			final String lineFromFile = scanner.nextLine();
 			List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
+			
+			// id, name, password, wage
+			String data1 = user.get(1);
+		    String data3 = user.get(3);
+		    JButton resetPassword = new JButton("Reset Password");
+
+		    Object[] rowData = new Object[] {data1, resetPassword, data3};
 		    
-		    // only show all unpaid, completed time logs
-		    if (user.get(3).equals("null")) {
-			    List<String> thisEmployee = v.getUserData("WorkersDB.txt", user.get(0));
-			    
-		    }
+			tableModel.addRow(rowData);
+		    
 		}
 		
 		scanner.close();
 		
-		JLabel clockedInLabel = new JLabel();
-		clockedInLabel.setText("Edit employee info:");
-		clockedInLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
-		currentWorkersPanel.add(clockedInLabel);
+		JLabel editEmpLabel = new JLabel();
+		editEmpLabel.setText("Edit employee info:");
+		editEmpLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
+		editWorkersPanel.add(editEmpLabel, c);
 		
 		return editWorkersPanel;
 	}

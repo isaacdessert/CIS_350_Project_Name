@@ -1,0 +1,5 @@
+44148, 10-24-2018, 01:57 PM, 01:59 PM, 2 Minutes, true
+44148, 10-24-2018, 01:59 PM, 02:00 PM, 1 Minute, true
+15009, 10-24-2018, 02:00 PM, 02:01 PM, 1 Minute, true
+44148, 10-24-2018, 02:00 PM, null, null, false
+15009, 10-24-2018, 02:01 PM, 02:03 PM, 2 Minutes, false
