@@ -10,13 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -64,6 +59,17 @@ public class ManagerPanel {
 	
 	/** Data table. */
 	private DefaultTableModel tableModel;
+	
+	/** Table column names. */
+	private String[] columnNames = {
+			"Name",
+			"Date",
+            "Clocked In",
+            "Clocked Out",
+            "Total Hours",
+            "Hourly Rate",
+            "Wages Earned"
+            };
 	
 	/** logged in as manager. 
 	 * @throws FileNotFoundException 
@@ -149,38 +155,27 @@ public class ManagerPanel {
 		c.ipadx = 10;
 		c.ipady = 5;
 		nav.add(overview, c);
-		
 
-		
-		
 		payroll = new JButton("Pay Wages");
 		payroll.setFont(buttonStyle);
 		c.gridy++;
 		nav.add(payroll, c);
 		
-
-		
-		
 		currentWorkers = new JButton("Currently Working");
 		currentWorkers.setFont(buttonStyle);
 		c.gridy++;
 		nav.add(currentWorkers, c);
-
-
-		
 		
 		addEmployee = new JButton("Add Employee");
 		addEmployee.setFont(buttonStyle);
 		c.gridy++;
 		nav.add(addEmployee, c);
 		
-		
 		editEmployees = new JButton("Edit Employees");
 		editEmployees.setFont(buttonStyle);
 		c.insets = new Insets(0, 0, 125, 0);
 		c.gridy++;
 		nav.add(editEmployees, c);
-		
 		
 		overview.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
@@ -305,16 +300,6 @@ public class ManagerPanel {
 	private JPanel payroll() throws FileNotFoundException {
 		payrollPanel = new JPanel();
 		
-		String[] columnNames = {
-				"Name",
-				"Date",
-                "Clocked In",
-                "Clocked Out",
-                "Total Hours",
-                "Hourly Rate",
-                "Wages Earned"
-                };
-		
 		// fill a multidimensional array with a loop from the database
 
 		DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
@@ -328,10 +313,7 @@ public class ManagerPanel {
 		for (int i = rowCount - 1; i >= 0; i--) {
 			tableModel.removeRow(i);
 		}
-		
-		// 00000, 10-4-18, 11:35, 19:23, 8 hours 12 minutes
-		// id, date, in, null, null
-		
+
 		double totalPayout = 0.0;
 		int totalHrs = 0;
 		int totalMins = 0;
@@ -408,7 +390,6 @@ public class ManagerPanel {
 			totalRowData = new Object[] {"TOTALS:", null, null, null, totalHours, null, currency.format(totalPayout)};
 			tableModel.addRow(totalRowData);
 		}
-
 		
 		// hours table header
 		GridBagConstraints c = new GridBagConstraints();
@@ -479,10 +460,8 @@ public class ManagerPanel {
 	    				}
 	    			}
     			
-    			
 	    			// replace the file data with the value of tempData
 	    			System.out.println(tempData);
-	    			
 	    			
 					try {
 						workers = new FileWriter("TimeLogDB.txt", false);
@@ -714,7 +693,6 @@ public class ManagerPanel {
 	 * @throws FileNotFoundException */
 	private JPanel editWorkers() throws FileNotFoundException {
 		editWorkersPanel = new JPanel();
-		ValidateAccess v = new ValidateAccess();
 		
 		editWorkersPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
