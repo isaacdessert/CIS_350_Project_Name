@@ -10,8 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -56,6 +61,9 @@ public class ManagerPanel {
 	
 	/** Style of all buttons. */
 	private Font buttonStyle = new Font("Arial", Font.PLAIN, 16);
+	
+	/** Data table. */
+	private DefaultTableModel tableModel;
 	
 	/** logged in as manager. 
 	 * @throws FileNotFoundException 
@@ -552,7 +560,6 @@ public class ManagerPanel {
 		JTextField empName = new JTextField(15); 
 		empName.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
 		c.gridx = 1;
-		c.gridy++;
 		addEmployeePanel.add(empName, c);
 		
 		JLabel passwordLabel = new JLabel();
@@ -565,8 +572,19 @@ public class ManagerPanel {
 		JPasswordField empPass = new JPasswordField(15); 
 		empPass.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
 		c.gridx = 1;
-		c.gridy++;
 		addEmployeePanel.add(empPass, c);
+		
+		JLabel wageLabel = new JLabel();
+		wageLabel.setText("Hourly Wage: ");
+		c.gridx = 0;
+		c.gridy++;
+		wageLabel.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
+		addEmployeePanel.add(wageLabel, c);
+		
+		JTextField empWage = new JTextField(15); 
+		empWage.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
+		c.gridx = 1;
+		addEmployeePanel.add(empWage, c);
 		
 		JButton createEmployee = new JButton("Create New Employee");
 		createEmployee.setFont(buttonStyle);
@@ -577,16 +595,51 @@ public class ManagerPanel {
 		
 		createEmployee.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-            	 String password = String.valueOf(empPass.getPassword());
+            	String password = String.valueOf(empPass.getPassword());
             	
-        		AddWorker newEmp = new AddWorker();
-        		newEmp.setWorker(empName.getText(), password, 0.00);
-        		
-        		statusLabel.setText(empName.getText() + " successfully added.");
-        		
-        		// reset the fields
-        		empName.setText("");
-        		empPass.setText("");
+            	//check to make sure wage is valid
+            	String wage = "0.00";
+            	boolean validWage = true;
+            	
+            	if (!empWage.getText().equals("")) {
+            		wage = empWage.getText();
+            		
+            		if (wage.equals("")) {
+            			validWage = false;
+            		}
+            		
+            		try {
+            	        Integer.parseInt(wage);
+            	    } catch (NumberFormatException e1) {
+            	    	
+            	    	try {
+                	        Float.parseFloat(wage);
+                	    } catch (NumberFormatException e11) {
+                	    	wage = "0.00";
+                	    	validWage = false;
+                	    }
+            	    }
+            	    
+            	    
+            	}	
+            	
+            	if (validWage && (empName.getText().length()) > 0 && (empPass.getPassword().length) > 0 && (empWage.getText().length()) > 0) {
+	        		AddWorker newEmp = new AddWorker();
+	        		newEmp.setWorker(empName.getText(), password, wage);
+	        		statusLabel.setText(empName.getText() + " successfully added. ");
+	            	
+	        		// reset the fields
+	        		empName.setText("");
+	        		empPass.setText("");
+	        		empWage.setText("");
+            	}  else {
+            		statusLabel.setText("Please fill out all fields.");
+            	}
+            	
+            	if (!validWage) {
+            		statusLabel.setText("You must enter a valid wage. Try again.");
+            		empWage.setText("");
+            	}
             }
         });
 		
@@ -669,6 +722,7 @@ public class ManagerPanel {
 
 		
 		String[] columnNames = {
+				"ID", 
 				"Name",
 				"Password",
                 "Wage"
@@ -676,24 +730,42 @@ public class ManagerPanel {
 		
 		// fill a multidimensional array with a loop from the database
 
-		DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
-		JTable table = new JTable(tableModel);
+		tableModel = new DefaultTableModel(columnNames, 0);
+		
+		@SuppressWarnings("serial")
+		JTable table = new JTable(tableModel) {
+			public boolean isCellEditable(final int row, final int column) {
+			    if (column == 0) {
+			    	return false;
+			    }
+			    
+			    return true;
+			  }
+		};
+		
 		File doc = new File("WorkersDB.txt");
 		final Scanner scanner = new Scanner(doc, "UTF-8");
+		
 
 		while (scanner.hasNextLine()) {
 			final String lineFromFile = scanner.nextLine();
 			List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
 			
 			// id, name, password, wage
+			String data0 = user.get(0);
 			String data1 = user.get(1);
+			String data2 = user.get(2);
 		    String data3 = user.get(3);
-		    JButton resetPassword = new JButton("Reset Password");
 
-		    Object[] rowData = new Object[] {data1, resetPassword, data3};
+		    Object[] rowData = new Object[] {data0, data1, data2, data3};
 		    
 			tableModel.addRow(rowData);
-		    
+		}
+		
+		for (int col = 0; col < columnNames.length; col++) {
+			for (int row = 0; row < tableModel.getRowCount(); row++) {
+				tableModel.isCellEditable(row, col);
+			}
 		}
 		
 		scanner.close();
@@ -701,8 +773,69 @@ public class ManagerPanel {
 		JLabel editEmpLabel = new JLabel();
 		editEmpLabel.setText("Edit employee info:");
 		editEmpLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
+		c.gridx = 0;
+		c.gridy = 0;
 		editWorkersPanel.add(editEmpLabel, c);
 		
+		JLabel statusLabel = new JLabel();
+		statusLabel.setText(" ");
+		statusLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
+		c.gridy++;
+		editWorkersPanel.add(statusLabel, c);
+		
+		// hours table header
+	    c.ipady = 5;
+	    c.fill = GridBagConstraints.BOTH;
+	    c.anchor = GridBagConstraints.CENTER; 
+	    c.gridy++;
+		editWorkersPanel.add(table.getTableHeader(), c);
+		
+		// hours table
+		c.gridx = 0;
+		c.gridy++;
+		editWorkersPanel.add(table, c);
+		
+		table.getTableHeader().setReorderingAllowed(false);
+		table.getTableHeader().setResizingAllowed(false);
+		table.setPreferredSize(new Dimension(window.getWidth() - 325, table.getRowCount() * table.getRowHeight()));
+		
+		if (table.getRowCount() > 0) {
+			JButton updateWorkersDB = new JButton("Update");
+			updateWorkersDB.setFont(buttonStyle);
+			c.gridy++;
+			editWorkersPanel.add(updateWorkersDB, c);
+			
+			updateWorkersDB.addActionListener(new ActionListener() {
+	            public void actionPerformed(final ActionEvent e) {
+						try {
+							updateWorkersDB();
+							statusLabel.setText("Database updated successfully.");
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+	            }
+
+	        });
+		}
+		
 		return editWorkersPanel;
+	}
+	
+	/** Replace the database values with all values in the table. 
+	 * @throws IOException */
+	private void updateWorkersDB() throws IOException {
+		String newWorkersDB = "";
+		
+		for (int count = 0; count < tableModel.getRowCount(); count++) {
+			newWorkersDB += tableModel.getValueAt(count, 0) + ", " + tableModel.getValueAt(count, 1) 
+				+ ", " + tableModel.getValueAt(count, 2) + ", " + tableModel.getValueAt(count, 3) + "\n";
+		}
+		
+		System.out.println(newWorkersDB);
+		
+		FileWriter workers = new FileWriter("WorkersDB.txt", false);
+		workers.write(newWorkersDB);
+		workers.close();
+		
 	}
 }

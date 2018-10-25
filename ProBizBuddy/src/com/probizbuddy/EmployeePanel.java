@@ -168,7 +168,8 @@ public class EmployeePanel {
 		
 		// make toolbar
 		JButton logout = new JButton("Log Out");
-		logout.setBackground(new Color(204, 204, 204));
+		logout.setFont(new Font("Arial Black", Font.BOLD, 12));
+		logout.setMargin(new Insets(5, 5, 5, 5));
 		
 		logout.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
@@ -183,8 +184,23 @@ public class EmployeePanel {
 		
 
 		// toolbar
-		toolbar.add(logout);
+		GridBagConstraints cTool = new GridBagConstraints();
+		toolbar.setLayout(new GridBagLayout());
+		cTool.gridx = 0;
+		cTool.gridy = 0;
+		cTool.gridwidth = 1;
+		cTool.gridheight = 1;
+		cTool.weightx = 1.0;
+		cTool.weighty = 0.0;
+		cTool.anchor = GridBagConstraints.EAST;
+		cTool.fill = GridBagConstraints.NONE;
+		cTool.insets = new Insets(10, 6, 10, 6);
+		cTool.ipadx = 0;
+		cTool.ipady = 0;
+		
 		toolbar.setBackground(new Color(49, 128, 159));
+		toolbar.add(logout, cTool);
+		
 		
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridx = 0;
@@ -193,7 +209,7 @@ public class EmployeePanel {
 		constraints.weightx = 1.0;
 		constraints.weighty = .2;
 		
-		toolbar.setPreferredSize(new Dimension(window.getWidth(), 35));
+		toolbar.setPreferredSize(new Dimension(window.getWidth(), 45));
 		organizedPanel.add(toolbar, constraints);
 		
 		constraints.weightx = .5;
@@ -208,13 +224,6 @@ public class EmployeePanel {
 		
 		organizedPanel.add(hours, constraints);
 
-		
-
-		
-	    //organizedPanel.add(toolbar);
-		//organizedPanel.add(clock);
-		//organizedPanel.add(hours);
-		
 		organizedPanel.setBackground(blue);
 		
 		window.getContentPane().add(organizedPanel);
