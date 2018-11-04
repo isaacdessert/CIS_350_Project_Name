@@ -83,6 +83,11 @@ public class ManagerPanel {
 		
 		name = pName;
 		
+		// create user object
+		ValidateAccess v = new ValidateAccess();
+		User employee = v.createUser(name);
+		System.out.println("Logged in as " + employee.getName());
+		
 		// set up all components
 		addEmployee();
 		payroll();

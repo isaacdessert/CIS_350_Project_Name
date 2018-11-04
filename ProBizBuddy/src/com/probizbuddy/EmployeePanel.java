@@ -73,10 +73,10 @@ public class EmployeePanel {
 		
 		window = pWindow;
 		
-		ValidateAccess v = new ValidateAccess(window);
-		employee = v.getUserData("WorkersDB.txt", eName);
-		eID = employee.get(0);
-		System.out.println("eID = " + eID);
+		ValidateAccess v = new ValidateAccess();
+		User employee = v.createUser(eName);
+		
+		System.out.println("Logged in as " + employee.getName());
 		
 		// show their current hours if any exist
 	    try {
