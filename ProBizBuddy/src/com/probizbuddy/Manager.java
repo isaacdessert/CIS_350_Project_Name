@@ -9,6 +9,7 @@ public class Manager {
     String password;
     int id;
 
+    //constructor with params
     public Manager(String name, String password, int id) {
         this.name = name;
         this.password = password;
@@ -16,6 +17,7 @@ public class Manager {
 
     }
 
+    //constructor
     public Manager() {
         this.name = "Unknown";
         this.password = "password";
@@ -23,6 +25,7 @@ public class Manager {
 
     }
 
+    //getters and setters below
     public String getName() {
         return name;
     }
@@ -47,6 +50,7 @@ public class Manager {
         this.id = id;
     }
 
+    //toString method
     @Override
     public String toString() {
         return "Manager{" +
@@ -56,6 +60,7 @@ public class Manager {
                 '}';
     }
 
+    //equals method
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -66,6 +71,7 @@ public class Manager {
                 Objects.equals(password, manager.password);
     }
 
+    //hash code probably wont be needed
     @Override
     public int hashCode() {
         return Objects.hash(name, password, id);

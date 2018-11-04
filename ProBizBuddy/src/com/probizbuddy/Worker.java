@@ -11,6 +11,7 @@ public class Worker {
     double wage;
     double timeWorked;
 
+    //Constructor with param
     public Worker(String name, String password, int id, double wage, double timeWorked) {
         this.name = name;
         this.password = password;
@@ -19,6 +20,7 @@ public class Worker {
         this.timeWorked = timeWorked;
     }
 
+    //Constructor
     public Worker() {
         this.name = "Worker";
         this.password = "password";
@@ -27,6 +29,9 @@ public class Worker {
         this.timeWorked = 0.0;
     }
 
+    /*
+    Getters and setters below
+     */
     public String getName() {
         return name;
     }
@@ -67,6 +72,7 @@ public class Worker {
         this.timeWorked = timeWorked;
     }
 
+    //To string
     @Override
     public String toString() {
         return "Worker{" +
@@ -78,6 +84,7 @@ public class Worker {
                 '}';
     }
 
+    //equals method
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -90,6 +97,7 @@ public class Worker {
                 Objects.equals(password, worker.password);
     }
 
+    //hash object, probably wont be needed.
     @Override
     public int hashCode() {
         return Objects.hash(name, password, id, wage, timeWorked);
