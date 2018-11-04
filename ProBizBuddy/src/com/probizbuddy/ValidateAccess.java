@@ -57,7 +57,7 @@ public class ValidateAccess {
 		}
 	}
 	
-	/** Costructor.
+	/** Constructor.
 	 * @param pWindow : the window */
 	ValidateAccess(final JFrame pWindow) {
 		
@@ -177,7 +177,7 @@ public class ValidateAccess {
 	 * @throws FileNotFoundException */
 	public  List<String> getUserData(final String file, final String name) throws FileNotFoundException {
 		File doc = new File(file);
-		final Scanner scanner = new Scanner(doc);
+		final Scanner scanner = new Scanner(doc, "UTF-8");
 
 		while (scanner.hasNextLine()) {
 			final String lineFromFile = scanner.nextLine();
@@ -197,6 +197,29 @@ public class ValidateAccess {
 		scanner.close();
 		
 		System.out.println("No user matched this Name: " + name);
+		return null;
+	}
+	
+	
+	/** Creates a user object.
+	 *  @param name : user's name
+	 *  @throws FileNotFoundException 
+	 *  @return user object */
+	public User createUser(final String name) throws FileNotFoundException {
+		if (getUserData("WorkersDB.txt", name) != null) {
+			List<String> userData = getUserData("WorkersDB.txt", name);
+			
+			User user = new User(userData.get(0), userData.get(1), userData.get(2), userData.get(3));
+			return user;
+		}
+		
+		if (getUserData("ManagersDB.txt", name) != null) {
+			List<String> userData = getUserData("ManagersDB.txt", name);
+			
+			User user = new User(userData.get(0), userData.get(1), userData.get(2));
+			return user;
+		}
+		
 		return null;
 	}
 
