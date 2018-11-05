@@ -1,79 +1,62 @@
 package com.probizbuddy;
 
-import java.util.Objects;
+/** Defines a manager. */
+public class Manager implements User {
+	
+	/** Every user must have these. */
+	private String id, name, password;
 
-public class Manager {
+	
+	/** Constructor for Manager.
+	 *  @param pID : id
+	 *  @param pName : name
+	 *  @param pPassword : pass */
+	public Manager(final String pID, final String pName, final String pPassword) {
+		setID(pID);
+		setName(pName);
+		setPassword(pPassword);
+	}
 
-    // instance variables
-    String name;
-    String password;
-    int id;
+	
+	/** Getter method.
+	 * @return user id */
+	public String getID() {
+		return id;
+	}
+	
+	
+	/** Getter method.
+	 * @return user name */
+	public String getName() {
+		return name;
+	}
+	
+	
+	/** Getter method.
+	 * @return user password */
+	public String getPassword() {
+		return password;
+	}
 
-    //constructor with params
-    public Manager(String name, String password, int id) {
+	
+	/** Setter method.
+	 * @param pID */
+    public void setID(final String pID) {
+        this.id = pID;
+    }
+    
+	
+	/** Setter method.
+	 * @param name */
+    public void setName(final String name) {
         this.name = name;
-        this.password = password;
-        this.id = id;
-
     }
 
-    //constructor
-    public Manager() {
-        this.name = "Unknown";
-        this.password = "password";
-        this.id = 00000;
 
-    }
-
-    //getters and setters below
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
+	/** Setter method.
+	 * @param password */
+    public void setPassword(final String password) {
         this.password = password;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    //toString method
-    @Override
-    public String toString() {
-        return "Manager{" +
-                "name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", id=" + id +
-                '}';
-    }
-
-    //equals method
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Manager manager = (Manager) o;
-        return id == manager.id &&
-                Objects.equals(name, manager.name) &&
-                Objects.equals(password, manager.password);
-    }
-
-    //hash code probably wont be needed
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, password, id);
-    }
 }

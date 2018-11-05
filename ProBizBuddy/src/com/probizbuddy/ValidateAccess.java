@@ -201,23 +201,32 @@ public class ValidateAccess {
 	}
 	
 	
-	/** Creates a user object.
+	/** Creates a manager object.
 	 *  @param name : user's name
 	 *  @throws FileNotFoundException 
-	 *  @return user object */
-	public User createUser(final String name) throws FileNotFoundException {
-		if (getUserData("WorkersDB.txt", name) != null) {
-			List<String> userData = getUserData("WorkersDB.txt", name);
-			
-			User user = new User(userData.get(0), userData.get(1), userData.get(2), userData.get(3));
-			return user;
-		}
-		
+	 *  @return manager object */
+	public Manager createManager(final String name) throws FileNotFoundException {
 		if (getUserData("ManagersDB.txt", name) != null) {
 			List<String> userData = getUserData("ManagersDB.txt", name);
 			
-			User user = new User(userData.get(0), userData.get(1), userData.get(2));
-			return user;
+			Manager manager = new Manager(userData.get(0), userData.get(1), userData.get(2));
+			return manager;
+		}
+		
+		return null;
+	}
+	
+	
+	/** Creates a worker object.
+	 *  @param name : user's name
+	 *  @throws FileNotFoundException 
+	 *  @return worker object */
+	public Worker createWorker(final String name) throws FileNotFoundException {
+		if (getUserData("WorkersDB.txt", name) != null) {
+			List<String> userData = getUserData("WorkersDB.txt", name);
+			
+			Worker worker = new Worker(userData.get(0), userData.get(1), userData.get(2), userData.get(3));
+			return worker;
 		}
 		
 		return null;

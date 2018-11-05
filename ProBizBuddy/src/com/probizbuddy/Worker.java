@@ -1,105 +1,78 @@
 package com.probizbuddy;
 
-import java.util.Objects;
+/** Defines a manager. */
+public class Worker implements User {
+	
+	/** Every user must have these. */
+	private String id, name, password, wage;
 
-public class Worker {
+	
+	/** Constructor for Manager.
+	 *  @param pID : id
+	 *  @param pName : name
+	 *  @param pPassword : pass
+	 *  @param pWage : wage */
+	public Worker(final String pID, final String pName, final String pPassword, final String pWage) {
+		setID(pID);
+		setName(pName);
+		setPassword(pPassword);
+		setWage(pWage);
+	}
 
-    //instance variables
-    String name;
-    String password;
-    int id;
-    double wage;
-    double timeWorked;
+	
+	/** Getter method.
+	 * @return user id */
+	public String getID() {
+		return id;
+	}
+	
+	
+	/** Getter method.
+	 * @return user name */
+	public String getName() {
+		return name;
+	}
+	
+	
+	/** Getter method.
+	 * @return user password */
+	public String getPassword() {
+		return password;
+	}
+	
+	
+	/** Getter method.
+	 * @return employee wage */
+	public String getWage() {
+		return wage;
+	}
 
-    //Constructor with param
-    public Worker(String name, String password, int id, double wage, double timeWorked) {
+	
+	/** Setter method.
+	 * @param pID */
+    public void setID(final String pID) {
+        this.id = pID;
+    }
+    
+	
+	/** Setter method.
+	 * @param name */
+    public void setName(final String name) {
         this.name = name;
-        this.password = password;
-        this.id = id;
-        this.wage = wage;
-        this.timeWorked = timeWorked;
     }
 
-    //Constructor
-    public Worker() {
-        this.name = "Worker";
-        this.password = "password";
-        this.id = 00000;
-        this.wage = 0.0;
-        this.timeWorked = 0.0;
-    }
 
-    /*
-    Getters and setters below
-     */
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
+	/** Setter method.
+	 * @param password */
+    public void setPassword(final String password) {
         this.password = password;
     }
+    
+    
+	/** Setter method.
+	 * @param wage */
+	public void setWage(final String wage) {
+		this.wage = wage;
+	}
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public double getWage() {
-        return wage;
-    }
-
-    public void setWage(double wage) {
-        this.wage = wage;
-    }
-
-    public double getTimeWorked() {
-        return timeWorked;
-    }
-
-    public void setTimeWorked(double timeWorked) {
-        this.timeWorked = timeWorked;
-    }
-
-    //To string
-    @Override
-    public String toString() {
-        return "Worker{" +
-                "name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", id=" + id +
-                ", wage=" + wage +
-                ", timeWorked=" + timeWorked +
-                '}';
-    }
-
-    //equals method
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Worker worker = (Worker) o;
-        return id == worker.id &&
-                Double.compare(worker.wage, wage) == 0 &&
-                Double.compare(worker.timeWorked, timeWorked) == 0 &&
-                Objects.equals(name, worker.name) &&
-                Objects.equals(password, worker.password);
-    }
-
-    //hash object, probably wont be needed.
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, password, id, wage, timeWorked);
-    }
 }

@@ -52,13 +52,10 @@ public class EmployeePanel {
 	private JTable table;
     
     /** Employee ID they logged in with. */
-    private String eID, eName;
+    private String eID, name;
     
     /** Creates an expandable data table. */
     private DefaultTableModel tableModel;
-    
-    /** Manager list from db. */
-	private List<String> employee;
     
 
 	/** 
@@ -68,13 +65,13 @@ public class EmployeePanel {
 	 * @throws FileNotFoundException 
 	 * */
 	public EmployeePanel(final JFrame pWindow, final String employeeName) throws FileNotFoundException {
-		eName = employeeName;
 		System.out.println("Logged in as " + employeeName);
 		
 		window = pWindow;
+		name = employeeName;
 		
 		ValidateAccess v = new ValidateAccess();
-		User employee = v.createUser(eName);
+		Worker employee = v.createWorker(name);
 		
 		System.out.println("Logged in as " + employee.getName());
 		
