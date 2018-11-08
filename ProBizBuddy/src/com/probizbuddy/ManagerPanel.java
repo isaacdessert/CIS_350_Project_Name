@@ -42,9 +42,6 @@ public class ManagerPanel {
 	/** Navigation buttons. */
 	private JButton overview, payroll, currentWorkers, addEmployee, editEmployees, logout;
 	
-	/** Strings storing the manager's info. */
-	private String name;
-	
 	/** Format of currency. */
 	private NumberFormat currency;
 	
@@ -71,22 +68,22 @@ public class ManagerPanel {
             "Wages Earned"
             };
 	
+	/** Manager object. */
+	private Manager user;
+	
 	/** logged in as manager. 
 	 * @throws FileNotFoundException 
 	 * @param pWindow : window
-	 * @param pName : manager's name */
-	ManagerPanel(final JFrame pWindow, final String pName) throws FileNotFoundException {
+	 * @param manager : manager object */
+	ManagerPanel(final JFrame pWindow, final Manager manager) throws FileNotFoundException {
 		window = pWindow;
 		layout = new JPanel();
 		nav = new JPanel();
 		dash = new JPanel();
 		
-		name = pName;
+		user = manager;
 		
-		// create user object
-		ValidateAccess v = new ValidateAccess();
-		User employee = v.createManager(name);
-		System.out.println("Logged in as " + employee.getName());
+		System.out.println("Logged in as " + user.getName());
 		
 		// set up all components
 		addEmployee();
@@ -292,7 +289,7 @@ public class ManagerPanel {
 		GridBagConstraints c = new GridBagConstraints();
 		
 		JLabel userLabel = new JLabel();
-		userLabel.setText("Welcome, " + name);
+		userLabel.setText("Welcome, " + user.getName());
 		userLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
 		overviewPanel.add(userLabel, c);
 		

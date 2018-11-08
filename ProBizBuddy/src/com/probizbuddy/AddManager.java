@@ -199,11 +199,15 @@ public class AddManager extends JPanel {
 		
 	    System.out.println(name + " added");
 	    pw.println(mid + ", " + name + ", " + password);
+	    
+	    // create manager object to pass
+	    ValidateAccess v = new ValidateAccess();
+	    Manager manager = v.createManager(name);
 		
 		// redirect them to their manager's panel
 		newManager.setVisible(false);
-		ManagerPanel manager = new ManagerPanel(window, name);
-		manager.showPanel();
+		ManagerPanel managerPanel = new ManagerPanel(window, manager);
+		managerPanel.showPanel();
 		
 		pw.close();
 	}

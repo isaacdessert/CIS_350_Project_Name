@@ -51,29 +51,28 @@ public class EmployeePanel {
 	/** Table that displays the user's hours. */
 	private JTable table;
     
-    /** Employee ID they logged in with. */
-    private String eID, name;
-    
     /** Creates an expandable data table. */
     private DefaultTableModel tableModel;
     
+    /** Creates an employee object. */
+    private Worker user;
+    
+    /** Stores the user id for comparing with a list<string>. */
+    private String uID;
 
 	/** 
 	 * constructor to set up the window.
-	 * @param employeeName : the employee that is logged in
+	 * @param employee : employee object of person logged in
 	 * @param pWindow : the gui
 	 * @throws FileNotFoundException 
 	 * */
-	public EmployeePanel(final JFrame pWindow, final String employeeName) throws FileNotFoundException {
-		System.out.println("Logged in as " + employeeName);
-		
+	public EmployeePanel(final JFrame pWindow, final Worker employee) throws FileNotFoundException {
+		user = employee;
 		window = pWindow;
-		name = employeeName;
 		
-		ValidateAccess v = new ValidateAccess();
-		Worker employee = v.createWorker(name);
+		uID = employee.getID();
 		
-		System.out.println("Logged in as " + employee.getName());
+		System.out.println("Logged in as " + user.getName());
 		
 		// show their current hours if any exist
 	    try {
@@ -255,7 +254,7 @@ public class EmployeePanel {
 	public boolean isClockedIn() {
 		// check the database
 		if (tableModel != null && tableModel.getRowCount() > 0) {
-			if (tableModel.getValueAt(tableModel.getRowCount() - 1, 2).toString().equals("null")) {
+			if (tableModel.getValueAt(tableModel.getRowCount() - 1, 2).toString().equals("-")) {
 				// show clock out button
 				showClockOutButton();
 			} else {
@@ -290,7 +289,7 @@ public class EmployeePanel {
 				
 				// 00000, 10-4-18, 11:35, 19:23, 8 hours 12 minutes, false
 				// id, date, in, null, null, false
-				out.println(eID + ", " + simpleDate + ", " + simpleTime + ", null, null, false");
+				out.println(user.getID() + ", " + simpleDate + ", " + simpleTime + ", null, null, false");
 
 			} catch (IOException e) {
 			    //exception handling left as an exercise for the reader
@@ -357,7 +356,8 @@ public class EmployeePanel {
 			final String lineFromFile = scanner.nextLine();
 			List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
 			// id, name, password
-			if (user.get(0).equals(eID) && user.get(3).equals("null")) { 
+			
+			if (user.get(0).equals(uID) && user.get(3).equals("null")) { 
 			    
 			    String updatedLine = 
 			    		user.get(0) + ", " + user.get(1) + ", " + user.get(2) + ", " + time2 + ", " + timeDifference + ", false";
@@ -412,12 +412,12 @@ public class EmployeePanel {
 			final String lineFromFile = scanner.nextLine();
 			List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
 			// id, name, password
-			if (user.get(0).equals(eID) && user.get(5).equals("false")) { 
+			if (user.get(0).equals(uID) && user.get(5).equals("false")) { 
 				// add to an arraylist of their hours
 				String data1 = user.get(1);
 			    String data2 = user.get(2);
-			    String data3 = user.get(3);
-			    String data4 = user.get(4);
+			    String data3 = replaceNull(user.get(3)); // possible null
+			    String data4 = replaceNull(user.get(4)); // possible null
 
 			    Object[] rowData = new Object[] {data1, data2, data3, data4};
 			    
@@ -447,6 +447,17 @@ public class EmployeePanel {
 		table = new JTable(tableModel);
 		
 
+	}
+	
+	/** Replace word null with a dash for user readability.
+	 *  @return a dash if it is null 
+	 *  @param x string to test */
+	private String replaceNull(final String x) {
+		if (x.equals("null")) {
+			return "-";
+		}
+		
+		return x;
 	}
 	
 

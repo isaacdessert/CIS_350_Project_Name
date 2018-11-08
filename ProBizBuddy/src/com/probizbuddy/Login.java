@@ -228,17 +228,23 @@ public class Login {
 						
 						// determine whether they are an employee or manager
 						// manager
+						ValidateAccess v = new ValidateAccess();
+						
 						if (isManager) {
-							ManagerPanel employee = new ManagerPanel(window, nameInput.getText());
+							Manager manager = v.createManager(nameInput.getText());
+							ManagerPanel mangerPanel = new ManagerPanel(window, manager);
+							
 							login.setVisible(false); //hide the log in panel
-							employee.showPanel();
+							mangerPanel.showPanel();
 							
 							return true;
 						} else {
 							// employee
-							EmployeePanel employee = new EmployeePanel(window, nameInput.getText());
+							Worker employee = v.createWorker(nameInput.getText());
+							EmployeePanel employeePanel = new EmployeePanel(window, employee);
+							
 							login.setVisible(false); //hide the log in panel
-							employee.showPanel();
+							employeePanel.showPanel();
 							
 							return true;
 						}
