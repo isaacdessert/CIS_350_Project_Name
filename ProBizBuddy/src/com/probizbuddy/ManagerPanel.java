@@ -37,10 +37,10 @@ public class ManagerPanel {
 	private JPanel layout, nav, dash;
 	
 	/** Optional panels to view. */
-	private JPanel overviewPanel, payrollPanel, addEmployeePanel, currentWorkersPanel, editWorkersPanel;
+	private JPanel overviewPanel, payrollPanel, addEmployeePanel, currentWorkersPanel, editWorkersPanel, createManagerPanel;
 	
 	/** Navigation buttons. */
-	private JButton overview, payroll, currentWorkers, addEmployee, editEmployees, logout;
+	private JButton overview, payroll, currentWorkers, addEmployee, editEmployees, createManager, logout;
 	
 	/** Format of currency. */
 	private NumberFormat currency;
@@ -90,7 +90,7 @@ public class ManagerPanel {
 		payroll();
 		currentWorkers();
 		editWorkers();
-		
+		createManager();
 		setDashComponent(overview());
 	}
 	
@@ -175,9 +175,14 @@ public class ManagerPanel {
 		
 		editEmployees = new JButton("Edit Employees");
 		editEmployees.setFont(buttonStyle);
-		c.insets = new Insets(0, 0, 125, 0);
 		c.gridy++;
 		nav.add(editEmployees, c);
+		
+		createManager = new JButton("Create Manager");
+		createManager.setFont(buttonStyle);
+		c.insets = new Insets(0, 0, 125, 0);
+		c.gridy++;
+		nav.add(createManager, c);
 		
 		overview.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
@@ -188,6 +193,7 @@ public class ManagerPanel {
         		currentWorkers.setEnabled(true); currentWorkersPanel.setVisible(false); currentWorkersPanel.removeAll();
         		addEmployee.setEnabled(true); addEmployeePanel.setVisible(false); addEmployeePanel.removeAll();
         		editEmployees.setEnabled(true); editWorkersPanel.setVisible(false); editWorkersPanel.removeAll();
+        		createManager.setEnabled(true); createManagerPanel.setVisible(false); createManagerPanel.removeAll();
             }
         });
 		
@@ -204,6 +210,7 @@ public class ManagerPanel {
         		currentWorkers.setEnabled(true); currentWorkersPanel.setVisible(false); currentWorkersPanel.removeAll();
         		addEmployee.setEnabled(true); addEmployeePanel.setVisible(false); addEmployeePanel.removeAll();
         		editEmployees.setEnabled(true); editWorkersPanel.setVisible(false); editWorkersPanel.removeAll();
+        		createManager.setEnabled(true); createManagerPanel.setVisible(false); createManagerPanel.removeAll();
             }
         });
 		
@@ -220,6 +227,7 @@ public class ManagerPanel {
         		currentWorkers.setEnabled(false); currentWorkersPanel.setVisible(true);
         		addEmployee.setEnabled(true); addEmployeePanel.setVisible(false); addEmployeePanel.removeAll();
         		editEmployees.setEnabled(true); editWorkersPanel.setVisible(false); editWorkersPanel.removeAll();
+        		createManager.setEnabled(true); createManagerPanel.setVisible(false); createManagerPanel.removeAll();
             }
         });
 		
@@ -232,6 +240,7 @@ public class ManagerPanel {
         		currentWorkers.setEnabled(true); currentWorkersPanel.setVisible(false); currentWorkersPanel.removeAll();
         		addEmployee.setEnabled(false); addEmployeePanel.setVisible(true);
         		editEmployees.setEnabled(true); editWorkersPanel.setVisible(false); editWorkersPanel.removeAll();
+        		createManager.setEnabled(true); createManagerPanel.setVisible(false); createManagerPanel.removeAll();
             }
         });
 		
@@ -248,6 +257,24 @@ public class ManagerPanel {
         		currentWorkers.setEnabled(true); currentWorkersPanel.setVisible(false); currentWorkersPanel.removeAll();
         		addEmployee.setEnabled(true); addEmployeePanel.setVisible(false); addEmployeePanel.removeAll();
         		editEmployees.setEnabled(false); editWorkersPanel.setVisible(true); 
+        		createManager.setEnabled(true); createManagerPanel.setVisible(false); createManagerPanel.removeAll();
+            }
+        });
+		
+		createManager.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+            	try {
+					setDashComponent(createManager());
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+            	
+        		overview.setEnabled(true); overviewPanel.setVisible(false); overview.removeAll();
+            	payroll.setEnabled(true); payrollPanel.setVisible(false); payrollPanel.removeAll();
+        		currentWorkers.setEnabled(true); currentWorkersPanel.setVisible(false); currentWorkersPanel.removeAll();
+        		addEmployee.setEnabled(true); addEmployeePanel.setVisible(false); addEmployeePanel.removeAll();
+        		editEmployees.setEnabled(true); editWorkersPanel.setVisible(false); editWorkersPanel.removeAll();
+        		createManager.setEnabled(false); createManagerPanel.setVisible(true); 
             }
         });
 		
@@ -818,4 +845,54 @@ public class ManagerPanel {
 		workers.close();
 		
 	}
+	
+
+private JPanel createManager() throws FileNotFoundException {
+        createManagerPanel = new JPanel();
+
+        createManagerPanel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+
+        JLabel manNamelabel = new JLabel();
+        manNamelabel.setText("Name: ");
+        c.gridx = 0;
+        c.gridy++;
+        manNamelabel.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
+        createManagerPanel.add(manNamelabel, c);
+
+        JTextField manName = new JTextField(15);
+        manName.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
+        c.gridx = 1;
+        createManagerPanel.add(manName, c);
+
+        JLabel manPasswordLabel = new JLabel();
+        manPasswordLabel.setText("Password: ");
+        c.gridx = 0;
+        c.gridy++;
+        manPasswordLabel.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
+        createManagerPanel.add(manPasswordLabel, c);
+
+        JPasswordField manPass = new JPasswordField(15);
+        manPass.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
+        c.gridx = 1;
+        createManagerPanel.add(manPass, c);
+
+        JButton createManager = new JButton("Create New Manager");
+        createManager.setFont(buttonStyle);
+        c.gridx = 1;
+        c.gridy++;
+        createManager.setMargin(new Insets(5, 5, 5, 5));
+        createManagerPanel.add(createManager, c);
+
+        
+        createManager.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+                ;
+
+            }
+        });
+
+        return createManagerPanel;
+    }
 }
