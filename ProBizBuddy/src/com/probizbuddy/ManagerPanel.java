@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -854,6 +855,19 @@ private JPanel createManager() throws FileNotFoundException {
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
 
+        JLabel manformLabel = new JLabel();
+		manformLabel.setText("Add a new Manager Here");
+		manformLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
+		c.gridx = 0;
+		c.gridy = 0;
+		createManagerPanel.add(manformLabel, c);
+		
+		JLabel manStatusLabel = new JLabel();
+		manStatusLabel.setText("\n");
+		manStatusLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
+		c.gridy++;
+		addEmployeePanel.add(manStatusLabel, c);
+		
         JLabel manNamelabel = new JLabel();
         manNamelabel.setText("Name: ");
         c.gridx = 0;
@@ -888,8 +902,52 @@ private JPanel createManager() throws FileNotFoundException {
         
         createManager.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-                ;
-
+            	String password = String.valueOf(manPass.getPassword());
+            	
+            	//check to make sure wage is valid
+            	String wage = "0.00";
+            	boolean validWage = true;
+            	
+            		
+            		if (wage.equals("")) {
+            			validWage = false;
+            		}
+            		
+            		try {
+            	        Integer.parseInt(wage);
+            	    } catch (NumberFormatException e1) {
+            	    	
+            	    	try {
+                	        Float.parseFloat(wage);
+                	    } catch (NumberFormatException e11) {
+                	    	wage = "0.00";
+                	    	validWage = false;
+                	    }
+            	    }
+            	
+            	if (validWage && (manName.getText().length()) > 0 && (manPass.getPassword().length) > 0 ){
+	        		AddManager newMan = new AddManager();
+	        		try {
+						newMan.setManager(manName.getText(), password);
+					} catch (UnsupportedEncodingException e1) {
+						manStatusLabel.setText("Difficulty adding " + manName.getText());
+						e1.printStackTrace();
+					} catch (FileNotFoundException e1) {
+						manStatusLabel.setText("Couldnt find file");
+						e1.printStackTrace();
+					}
+	        		manStatusLabel.setText(manName.getText() + " successfully added. ");
+	            	
+	        		// reset the fields
+	        		manName.setText("");
+	        		manPass.setText("");
+            	}  else {
+            		manStatusLabel.setText("Please fill out all fields.");
+            	}
+            	
+            	if (!validWage) {
+            		manStatusLabel.setText("You must enter a valid wage. Try again.");
+            	}
             }
         });
 

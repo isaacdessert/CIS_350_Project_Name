@@ -52,6 +52,11 @@ public class AddManager extends JPanel {
 		window = pWindow;
 		newManager = new JPanel();
 	}
+	 
+	/*constructor for base level */
+	AddManager() {
+		
+	}
 	
 	
 	/** show the form to add a manager. */
