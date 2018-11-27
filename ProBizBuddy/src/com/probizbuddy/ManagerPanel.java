@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -44,6 +45,11 @@ public class ManagerPanel {
 	
 	/** Format of currency. */
 	private NumberFormat currency;
+	
+	/** Manager name and password. */
+	private JTextField manName;
+	
+	private JPasswordField manPass;
 	
 	/** Totals the payroll data. */
 	private Object[] totalRowData;
@@ -847,21 +853,36 @@ public class ManagerPanel {
 	}
 	
 
+/** create a manger account.
+ *  @throws FileNotFoundException file not found
+ *  @return JPanel for the screen */
 private JPanel createManager() throws FileNotFoundException {
         createManagerPanel = new JPanel();
 
         createManagerPanel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
+        
+		JLabel formLabel = new JLabel();
+		formLabel.setText("Have the new manager fill this out:");
+		formLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
+		c.gridx = 0;
+		c.gridy = 0;
+		createManagerPanel.add(formLabel, c);
+		
+		JLabel statusLabel = new JLabel();
+		statusLabel.setText("\n");
+		statusLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
+		c.gridy++;
+		createManagerPanel.add(statusLabel, c);
 
         JLabel manNamelabel = new JLabel();
         manNamelabel.setText("Name: ");
-        c.gridx = 0;
         c.gridy++;
         manNamelabel.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
         createManagerPanel.add(manNamelabel, c);
 
-        JTextField manName = new JTextField(15);
+        manName = new JTextField(15);
         manName.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
         c.gridx = 1;
         createManagerPanel.add(manName, c);
@@ -873,7 +894,7 @@ private JPanel createManager() throws FileNotFoundException {
         manPasswordLabel.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
         createManagerPanel.add(manPasswordLabel, c);
 
-        JPasswordField manPass = new JPasswordField(15);
+        manPass = new JPasswordField(15);
         manPass.setFont(new Font("Arial", Font.PLAIN | Font.BOLD, 14));
         c.gridx = 1;
         createManagerPanel.add(manPass, c);
@@ -888,7 +909,28 @@ private JPanel createManager() throws FileNotFoundException {
         
         createManager.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-                ;
+
+            	String password = String.valueOf(manPass.getPassword());
+
+            	
+            	if ((manName.getText().length()) > 0 && (manPass.getPassword().length) > 0) {
+	        		AddManager newMan = new AddManager();
+	        		try {
+						newMan.addManagerToDB(manName.getText(), password);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+	        		
+	        		statusLabel.setText(manName.getText() + " successfully added. ");
+	            	
+	        		// reset the fields
+	        		manName.setText("");
+	        		manPass.setText("");
+
+            	}  else {
+            		statusLabel.setText("Please fill out all fields.");
+            	}
 
             }
         });

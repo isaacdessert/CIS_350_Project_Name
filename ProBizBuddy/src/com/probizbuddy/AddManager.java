@@ -7,9 +7,12 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -50,6 +53,11 @@ public class AddManager extends JPanel {
 	 * @param pWindow : window */
 	AddManager(final JFrame pWindow) {
 		window = pWindow;
+		newManager = new JPanel();
+	}
+	
+	/** Default constructor. */
+	AddManager() {
 		newManager = new JPanel();
 	}
 	
@@ -210,5 +218,27 @@ public class AddManager extends JPanel {
 		managerPanel.showPanel();
 		
 		pw.close();
+	}
+	
+	
+	
+	/** add the manager to the database without log in.
+	 * @param name : manager's name
+	 * @param password : password 
+	 * @throws IOException */
+	public void addManagerToDB(final String name, final String password) throws IOException {
+		try (FileWriter fw = new FileWriter("ManagersDB.txt", true);
+			    BufferedWriter bw = new BufferedWriter(fw);
+			    PrintWriter out = new PrintWriter(bw)) {
+
+	
+		GenerateID mID = new GenerateID();
+		String mid = mID.getID();
+		
+	    System.out.println(name + " added");
+	    out.println(mid + ", " + name + ", " + password);
+		
+		out.close();
+		}
 	}
 }
