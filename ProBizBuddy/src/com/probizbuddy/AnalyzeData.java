@@ -7,6 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 /** Class for analyzing database content. */
 public class AnalyzeData {
 	
@@ -103,4 +106,94 @@ public class AnalyzeData {
 	public int countCurrentWorkers() throws FileNotFoundException {
 		return getCurrentWorkers().size();
 	}
+	
+	
+	/** Get time logs as objects.
+	 *  @return all time log objects
+	 *  @throws FileNotFoundException */
+	public List<TimeLog> getAllTimeLogs() throws FileNotFoundException {
+		
+		List<TimeLog> timeLogs = new ArrayList<TimeLog>();
+		
+		File doc = new File("TimeLogDB.txt");
+		final Scanner scanner = new Scanner(doc, "UTF-8");
+		
+		while (scanner.hasNextLine()) {
+			final String lineFromFile = scanner.nextLine();
+			List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
+
+			// add to an arraylist of their hours
+			String data0 = user.get(0);
+			String data1 = user.get(1);
+		    String data2 = user.get(2);
+		    String data3 = user.get(3); // possible null
+		    if (data3.equals("null")) {
+		    	data3 = null;
+		    }
+		    
+		    String data4 = user.get(4); // possible null
+		    if (data4.equals("null")) {
+		    	data4 = null;
+		    }
+		    
+		    boolean data5;
+		    if (user.get(5).equals("false")) {
+		    	data5 = false;
+		    } else {
+		    	data5 = true;
+		    }
+		    
+		    timeLogs.add(new TimeLog(data0, data1, data2, data3, data4, data5));
+		}
+
+		scanner.close();
+		return timeLogs;
+	}
+	
+	
+	/** Get a list of unpaid time logs.
+	 *  @param logList list of time logs
+	 *  @return list of unpaid logs */
+	public List<TimeLog> getUnpaidTimeLogs(final List<TimeLog> logList) {
+		List<TimeLog> unpaidLogs = new ArrayList<TimeLog>();
+		
+		for (TimeLog log : logList) {
+			if (!log.getPaid() && log.getEndTime() != null) {
+				unpaidLogs.add(log);
+			}
+		}
+		
+		return unpaidLogs;
+	}
+	
+	
+	/** Get a list of paid time logs.
+	 *  @param logList list of time logs
+	 *  @return list of unpaid logs */
+	public List<TimeLog> getPaidTimeLogs(final List<TimeLog> logList) {
+		List<TimeLog> paidLogs = new ArrayList<TimeLog>();
+		
+		for (TimeLog log : logList) {
+			if (log.getPaid()) {
+				paidLogs.add(log);
+			}
+		}
+		
+		return paidLogs;
+	}
+	
+	
+	/** Turn a list of objects into a list of names.
+	 *  @param logs list
+	 *  @return list */
+	public String logTotalsList(final List<TimeLog> logs) {
+		String logList = "";
+		
+		for (TimeLog timeLog : logs) {
+			logList += timeLog.getTotalTime() + ", ";
+		}
+		
+		return logList;
+	}
+
 }

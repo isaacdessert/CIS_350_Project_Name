@@ -354,13 +354,13 @@ public class ManagerPanel {
 		overviewPanel.add(empListLabel, c);
 		
 		JLabel unpaidHrsLabel = new JLabel();
-		unpaidHrsLabel.setText("Unpaid Hours: ");
+		unpaidHrsLabel.setText("Unpaid Logs: " + analyze.logTotalsList(analyze.getUnpaidTimeLogs(analyze.getAllTimeLogs())));
 		unpaidHrsLabel.setFont(new Font("Arial Black", Font.BOLD, 14));
 		c.gridy++;
 		overviewPanel.add(unpaidHrsLabel, c);
 		
 		JLabel paidHrsLabel = new JLabel();
-		paidHrsLabel.setText("Paid Hours: ");
+		paidHrsLabel.setText("Paid Logs: " + analyze.logTotalsList(analyze.getPaidTimeLogs(analyze.getAllTimeLogs())));
 		paidHrsLabel.setFont(new Font("Arial Black", Font.BOLD, 14));
 		c.gridy++;
 		overviewPanel.add(paidHrsLabel, c);
