@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -26,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 /** Main area for managers to control Pro Biz Buddy. */
@@ -192,7 +192,11 @@ public class ManagerPanel {
 		
 		overview.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-        		setDashComponent(overview());
+        		try {
+					setDashComponent(overview());
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
             	
         		overview.setEnabled(false); overviewPanel.setVisible(true);
             	payroll.setEnabled(true); payrollPanel.setVisible(false); payrollPanel.removeAll();
@@ -315,16 +319,51 @@ public class ManagerPanel {
 	}
 	
 	/** Overview (default) panel.
-	 * @return the JPanel to display. */
-	private JPanel overview() {
+	 * @return the JPanel to display. 
+	 * @throws FileNotFoundException */
+	private JPanel overview() throws FileNotFoundException {
 		overviewPanel = new JPanel();
 		overviewPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
+		AnalyzeData analyze = new AnalyzeData();
+		
 		JLabel userLabel = new JLabel();
 		userLabel.setText("Welcome, " + user.getName());
 		userLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
+		c.gridx = 0;
+		c.gridy = 0;
 		overviewPanel.add(userLabel, c);
+		
+		JLabel formLabel = new JLabel();
+		formLabel.setText("Number of Employees Clocked In: " + analyze.countCurrentWorkers());
+		formLabel.setFont(new Font("Arial Black", Font.BOLD, 14));
+		c.gridy++;
+		overviewPanel.add(formLabel, c);
+		
+		JLabel empCountLabel = new JLabel();
+		empCountLabel.setText("Number of Employees: " + analyze.countWorkers());
+		empCountLabel.setFont(new Font("Arial Black", Font.BOLD, 14));
+		c.gridy++;
+		overviewPanel.add(empCountLabel, c);
+		
+		JLabel empListLabel = new JLabel();
+		empListLabel.setText("Employee List: " + analyze.nameList(analyze.getAllWorkers()));
+		empListLabel.setFont(new Font("Arial Black", Font.BOLD, 14));
+		c.gridy++;
+		overviewPanel.add(empListLabel, c);
+		
+		JLabel unpaidHrsLabel = new JLabel();
+		unpaidHrsLabel.setText("Unpaid Hours: ");
+		unpaidHrsLabel.setFont(new Font("Arial Black", Font.BOLD, 14));
+		c.gridy++;
+		overviewPanel.add(unpaidHrsLabel, c);
+		
+		JLabel paidHrsLabel = new JLabel();
+		paidHrsLabel.setText("Paid Hours: ");
+		paidHrsLabel.setFont(new Font("Arial Black", Font.BOLD, 14));
+		c.gridy++;
+		overviewPanel.add(paidHrsLabel, c);
 		
 		return overviewPanel;
 	}
@@ -670,54 +709,27 @@ public class ManagerPanel {
 		currentWorkersPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
-		String employeesClockedIn = "";
 		
-		File workersDB = new File("WorkersDB.txt");
+		AnalyzeData analyze = new AnalyzeData();
 		
-		File timeDB = new File("TimeLogDB.txt");
-		final Scanner scanner = new Scanner(timeDB, "UTF-8");
-		
-		if (workersDB.length() > 0) {
-			if (timeDB.length() > 0) {
-				while (scanner.hasNextLine()) {
-					final String lineFromFile = scanner.nextLine();
-					List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
-				
-					// only show all unpaid, completed time logs
-					if (user.get(3).equals("null")) {
-						List<String> thisEmployee = v.getUserData("WorkersDB.txt", user.get(0));
-						String employeeName = thisEmployee.get(1);
-						
-						employeesClockedIn += employeeName + ", ";
-				    }
-				}
-				
-				scanner.close();
-				
-				if (!employeesClockedIn.equals("")) {
-					JLabel clockedInLabel = new JLabel();
-					clockedInLabel.setText("Current Employees Clocked In: " + employeesClockedIn.substring(0, employeesClockedIn.length() - 2));
-					clockedInLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
-					currentWorkersPanel.add(clockedInLabel, c);
-				} else {
-					JLabel clockedInLabel = new JLabel();
-					clockedInLabel.setText("There are no employees clocked in.");
-					clockedInLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
-					currentWorkersPanel.add(clockedInLabel, c);
-				}
-				
+		if (analyze.countWorkers() == 0) {
+			JLabel clockedInLabel = new JLabel();
+			clockedInLabel.setText("There are currently no employees. Please add one.");
+			clockedInLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
+			currentWorkersPanel.add(clockedInLabel, c);
+		} else {
+			if (!analyze.getCurrentWorkers().isEmpty()) {
+				JLabel clockedInLabel = new JLabel();
+				clockedInLabel.setText("Current Employees Clocked In: " + analyze.nameList(analyze.getCurrentWorkers()));
+				clockedInLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
+				currentWorkersPanel.add(clockedInLabel, c);
 			} else {
 				JLabel clockedInLabel = new JLabel();
 				clockedInLabel.setText("There are no employees clocked in.");
 				clockedInLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
 				currentWorkersPanel.add(clockedInLabel, c);
 			}
-		 } else {
-			 JLabel clockedInLabel = new JLabel();
-			 clockedInLabel.setText("There are currently no employees. Please add one.");
-			 clockedInLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
-			 currentWorkersPanel.add(clockedInLabel, c);
-		 }	
+		}
 		
 		return currentWorkersPanel;
 	}
