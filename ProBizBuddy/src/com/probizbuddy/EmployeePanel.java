@@ -407,17 +407,15 @@ public class EmployeePanel {
 		
 		// 00000, 10-4-18, 11:35, 19:23, 8 hours 12 minutes
 		// id, date, in, null, null
-
-		while (scanner.hasNextLine()) {
-			final String lineFromFile = scanner.nextLine();
-			List<String> user = Arrays.asList(lineFromFile.split("\\s*,\\s*"));
-			// id, name, password
-			if (user.get(0).equals(uID) && user.get(5).equals("false")) { 
-				// add to an arraylist of their hours
-				String data1 = user.get(1);
-			    String data2 = user.get(2);
-			    String data3 = replaceNull(user.get(3)); // possible null
-			    String data4 = replaceNull(user.get(4)); // possible null
+		
+		AnalyzeData a = new AnalyzeData();
+		
+		for (TimeLog timeLog : a.getAllTimeLogs()) {
+			if (timeLog.getID().equals(uID) && !timeLog.getPaid()) {
+				String data1 = timeLog.getStartDate();
+			    String data2 = timeLog.getStartTime();
+			    String data3 = replaceNull(timeLog.getEndTime()); // possible null
+			    String data4 = replaceNull(timeLog.getTotalTime()); // possible null
 
 			    Object[] rowData = new Object[] {data1, data2, data3, data4};
 			    
@@ -425,7 +423,6 @@ public class EmployeePanel {
 			}
 		}
 
-		scanner.close();
 	}
 	
 	
@@ -453,7 +450,7 @@ public class EmployeePanel {
 	 *  @return a dash if it is null 
 	 *  @param x string to test */
 	private String replaceNull(final String x) {
-		if (x.equals("null")) {
+		if (x == null || x.equals("null")) {
 			return "-";
 		}
 		

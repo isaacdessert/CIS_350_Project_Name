@@ -335,35 +335,45 @@ public class ManagerPanel {
 		c.gridy = 0;
 		overviewPanel.add(userLabel, c);
 		
-		JLabel formLabel = new JLabel();
-		formLabel.setText("Number of Employees Clocked In: " + analyze.countCurrentWorkers());
-		formLabel.setFont(new Font("Arial Black", Font.BOLD, 14));
-		c.gridy++;
-		overviewPanel.add(formLabel, c);
+		if (analyze.getAllWorkers() != null && analyze.nameList(analyze.getAllWorkers()) != null) {
+			JLabel formLabel = new JLabel();
+			formLabel.setText("Number of Employees Clocked In: " + analyze.countCurrentWorkers());
+			formLabel.setFont(new Font("Arial Black", Font.BOLD, 14));
+			c.gridy++;
+			overviewPanel.add(formLabel, c);
+		}
 		
-		JLabel empCountLabel = new JLabel();
-		empCountLabel.setText("Number of Employees: " + analyze.countWorkers());
-		empCountLabel.setFont(new Font("Arial Black", Font.BOLD, 14));
-		c.gridy++;
-		overviewPanel.add(empCountLabel, c);
+		if (analyze.getAllWorkers() != null) {
+			JLabel empCountLabel = new JLabel();
+			empCountLabel.setText("Number of Employees: " + analyze.countWorkers());
+			empCountLabel.setFont(new Font("Arial Black", Font.BOLD, 14));
+			c.gridy++;
+			overviewPanel.add(empCountLabel, c);
+		}
 		
-		JLabel empListLabel = new JLabel();
-		empListLabel.setText("Employee List: " + analyze.nameList(analyze.getAllWorkers()));
-		empListLabel.setFont(new Font("Arial Black", Font.BOLD, 14));
-		c.gridy++;
-		overviewPanel.add(empListLabel, c);
+		if (analyze.getAllWorkers() != null && analyze.nameList(analyze.getAllWorkers()) != null) {
+			JLabel empListLabel = new JLabel();
+			empListLabel.setText("Employee List: " + analyze.nameList(analyze.getAllWorkers()));
+			empListLabel.setFont(new Font("Arial Black", Font.BOLD, 14));
+			c.gridy++;
+			overviewPanel.add(empListLabel, c);
+		}
+
+		if (!analyze.logTotalsList(analyze.getUnpaidTimeLogs(analyze.getAllTimeLogs())).equals("")) {
+			JLabel unpaidHrsLabel = new JLabel();
+			unpaidHrsLabel.setText("Unpaid Logs: " + analyze.logTotalsList(analyze.getUnpaidTimeLogs(analyze.getAllTimeLogs())));
+			unpaidHrsLabel.setFont(new Font("Arial Black", Font.BOLD, 14));
+			c.gridy++;
+			overviewPanel.add(unpaidHrsLabel, c);
+		}
 		
-		JLabel unpaidHrsLabel = new JLabel();
-		unpaidHrsLabel.setText("Unpaid Logs: " + analyze.logTotalsList(analyze.getUnpaidTimeLogs(analyze.getAllTimeLogs())));
-		unpaidHrsLabel.setFont(new Font("Arial Black", Font.BOLD, 14));
-		c.gridy++;
-		overviewPanel.add(unpaidHrsLabel, c);
-		
-		JLabel paidHrsLabel = new JLabel();
-		paidHrsLabel.setText("Paid Logs: " + analyze.logTotalsList(analyze.getPaidTimeLogs(analyze.getAllTimeLogs())));
-		paidHrsLabel.setFont(new Font("Arial Black", Font.BOLD, 14));
-		c.gridy++;
-		overviewPanel.add(paidHrsLabel, c);
+		if (!analyze.logTotalsList(analyze.getPaidTimeLogs(analyze.getAllTimeLogs())).equals("")) {
+			JLabel paidHrsLabel = new JLabel();
+			paidHrsLabel.setText("Paid Logs: " + analyze.logTotalsList(analyze.getPaidTimeLogs(analyze.getAllTimeLogs())));
+			paidHrsLabel.setFont(new Font("Arial Black", Font.BOLD, 14));
+			c.gridy++;
+			overviewPanel.add(paidHrsLabel, c);
+		}
 		
 		return overviewPanel;
 	}
@@ -718,7 +728,7 @@ public class ManagerPanel {
 			clockedInLabel.setFont(new Font("Arial Black", Font.BOLD, 16));
 			currentWorkersPanel.add(clockedInLabel, c);
 		} else {
-			if (!analyze.getCurrentWorkers().isEmpty()) {
+			if (analyze.getCurrentWorkers() != null) {
 				JLabel clockedInLabel = new JLabel();
 				clockedInLabel.setText("Current Employees Clocked In: " + analyze.nameList(analyze.getCurrentWorkers()));
 				clockedInLabel.setFont(new Font("Arial Black", Font.BOLD, 16));

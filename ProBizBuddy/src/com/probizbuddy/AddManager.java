@@ -198,15 +198,12 @@ public class AddManager extends JPanel {
 	 * @throws FileNotFoundException 
 	 * @throws UnsupportedEncodingException */
 	public void setManager(final String name, final String password) throws UnsupportedEncodingException, FileNotFoundException {
-		File file = new File("ManagersDB.txt");
-		Writer w = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
-		PrintWriter pw = new PrintWriter(w);
-	
-		GenerateID mID = new GenerateID();
-		String mid = mID.getID();
 		
-	    System.out.println(name + " added");
-	    pw.println(mid + ", " + name + ", " + password);
+		try {
+			addManagerToDB(name, password);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	    
 	    // create manager object to pass
 	    ValidateAccess v = new ValidateAccess();
@@ -216,8 +213,6 @@ public class AddManager extends JPanel {
 		newManager.setVisible(false);
 		ManagerPanel managerPanel = new ManagerPanel(window, manager);
 		managerPanel.showPanel();
-		
-		pw.close();
 	}
 	
 	
@@ -228,17 +223,16 @@ public class AddManager extends JPanel {
 	 * @throws IOException */
 	public void addManagerToDB(final String name, final String password) throws IOException {
 		try (FileWriter fw = new FileWriter("ManagersDB.txt", true);
-			    BufferedWriter bw = new BufferedWriter(fw);
-			    PrintWriter out = new PrintWriter(bw)) {
-
-	
-		GenerateID mID = new GenerateID();
-		String mid = mID.getID();
-		
-	    System.out.println(name + " added");
-	    out.println(mid + ", " + name + ", " + password);
-		
-		out.close();
+		     BufferedWriter bw = new BufferedWriter(fw);
+			 PrintWriter out = new PrintWriter(bw)) {
+			
+			GenerateID mID = new GenerateID();
+			String mid = mID.getID();
+			
+		    System.out.println(name + " added");
+		    out.println(mid + ", " + name + ", " + password);
+			
+			out.close();
 		}
 	}
 }

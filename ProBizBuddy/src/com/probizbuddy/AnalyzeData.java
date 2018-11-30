@@ -32,7 +32,7 @@ public class AnalyzeData {
 				List<String> thisEmployee = v.getUserData("WorkersDB.txt", user.get(0));
 				workers.add(new Worker(thisEmployee.get(0), thisEmployee.get(1), thisEmployee.get(2), thisEmployee.get(3)));
 			}
-				
+			
 			scanner.close();
 			return workers;
 		}
@@ -60,7 +60,11 @@ public class AnalyzeData {
 	 * @return the count
 	 * @throws FileNotFoundException */
 	public int countWorkers() throws FileNotFoundException {
-		return getAllWorkers().size();
+		if (getAllWorkers() != null) {
+			return getAllWorkers().size();
+		}
+		
+		return 0;
 	}
 	
 	
@@ -104,7 +108,11 @@ public class AnalyzeData {
 	 * @return the count
 	 * @throws FileNotFoundException */
 	public int countCurrentWorkers() throws FileNotFoundException {
-		return getCurrentWorkers().size();
+		if (getCurrentWorkers() != null) {
+			return getCurrentWorkers().size();
+		}
+		
+		return 0;
 	}
 	
 	
