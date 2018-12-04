@@ -1,2 +1,2 @@
-19675, John Doe, jd, 10.50
+19675, John Doe, jd, 12.50
 56490, Reese Pankratz, rockfit, 12.00

@@ -469,9 +469,47 @@ public class ManagerPanel {
 			totalHours += "" + totalMins + " Ms";
 		}
 		
-		
+		// Taxes and witholdings
 		if (totalHours != null && totalPayout != 0.00) {
-			totalRowData = new Object[] {"TOTALS:", null, null, null, totalHours, null, currency.format(totalPayout)};
+			double fedIncomeTax = 0.0;
+			double secSecurityTax = totalPayout * .062;
+			double medicareTax = totalPayout * .0145;
+			double staIncomeTax = 0.0;
+			
+			// get this from settings
+			ValidateAccess settings = new ValidateAccess();
+			List<String> settingsList = settings.dbResults("Settings.txt");
+		
+			
+			if (settingsList != null) {
+				// get federal amount
+				if (settingsList.get(0) != null) {
+					fedIncomeTax = Double.parseDouble(settingsList.get(0));
+				}
+				
+				// get state amount
+				if (settingsList.get(1) != null) {
+					staIncomeTax = Double.parseDouble(settingsList.get(1));
+				}
+			}
+			
+			totalRowData = new Object[] {"TOTAL TIME:", null, null, null, totalHours, null, null};
+			tableModel.addRow(totalRowData);
+			totalRowData = new Object[] {"TOTAL GROSS PAY:", null, null, null, null, null, currency.format(totalPayout)};
+			tableModel.addRow(totalRowData);
+			
+			totalRowData = new Object[] {"FEDERAL INCOME TAX:", "Rate: " + fedIncomeTax + "%", null, null, null, null, "- " + currency.format(fedIncomeTax)};
+			tableModel.addRow(totalRowData);
+			totalRowData = new Object[] {"SOCIAL SECURITY TAX:", "Rate: 6.2%", null, null, null, null, "- " + currency.format(secSecurityTax)};
+			tableModel.addRow(totalRowData);
+			totalRowData = new Object[] {"MEDICARE TAX:", "Rate: 1.45%", null, null, null, null, "- " + currency.format(medicareTax)};
+			tableModel.addRow(totalRowData);
+			totalRowData = new Object[] {"STATE INCOME TAX:", "Rate: " + staIncomeTax + "%", null, null, null, null, "- " + currency.format(staIncomeTax)};
+			tableModel.addRow(totalRowData);
+
+			// after deductions
+			totalRowData = new Object[] {"TOTAL NET PAY:", null, null, null, null, null, 
+					currency.format(totalPayout - fedIncomeTax - secSecurityTax - medicareTax - staIncomeTax)};
 			tableModel.addRow(totalRowData);
 		}
 		

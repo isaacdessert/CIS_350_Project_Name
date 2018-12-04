@@ -1,3 +1,3 @@
 56490, 11-29-2018, 11:14 PM, 11:15 PM, 1 Minute, true
-56490, 11-29-2018, 11:15 PM, 11:17 PM, 2 Minutes, false
+56490, 11-29-2018, 11:15 PM, 11:17 PM, 2 Minutes, true
 19675, 11-29-2018, 11:16 PM, 11:17 PM, 1 Minute, false
