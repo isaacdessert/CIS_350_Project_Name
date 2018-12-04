@@ -2,9 +2,12 @@ package com.probizbuddy;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 import javax.swing.JTable;
@@ -159,6 +162,26 @@ public class AnalyzeData {
 	}
 	
 	
+	/** Get time logs as objects.
+	 *  @param logList 
+	 *  @param worker 
+	 *  @return all time log objects
+	 *  @throws FileNotFoundException */
+	public List<TimeLog> getCertainTimeLogs(final List<TimeLog> logList, final Worker worker) throws FileNotFoundException {
+		
+		List<TimeLog> timeLogs = new ArrayList<TimeLog>();
+		
+		for (TimeLog log : logList) {
+			 // get the results for this person
+		    if (log.getID().equals(worker.getID())) {
+		    	timeLogs.add(log);
+		    }
+		}
+		    
+		return timeLogs;
+	}
+	
+	
 	/** Get a list of unpaid time logs.
 	 *  @param logList list of time logs
 	 *  @return list of unpaid logs */
@@ -202,6 +225,89 @@ public class AnalyzeData {
 		}
 		
 		return logList;
+	}
+	
+	
+	/** Converts time logs into a sum.
+	 *  @param logs 
+	 *  @return total hours they worked */
+	public String sumLogTotalsList(final List<TimeLog> logs) {
+		
+		int totalHrs = 0;
+		int totalMins = 0;
+	
+		for (TimeLog timeLog : logs) {
+			
+		    int hours = 0;
+		    int minutes = 0;
+			String[] log = timeLog.getTotalTime().split(" ");
+		    
+		    if (log.length == 4) {
+		    	hours = Integer.parseInt(log[0]);
+		    	minutes = Integer.parseInt(log[2]);
+		    	
+		    	totalHrs += hours;
+		    	totalMins += minutes;
+		    } else {
+		    	minutes = Integer.parseInt(log[0]);
+		    	totalMins += minutes;
+		    }
+		    
+		    
+		} 
+		
+		return formatTimeLog(totalHrs, totalMins);
+	}
+	
+	/** Calculate wages from a list of time logs.
+	 *  @param logList 
+	 *  @param worker 
+	 *  @return wages 
+	 *  @throws FileNotFoundException */
+	public String calculateWages(final List<TimeLog> logList, final Worker worker) throws FileNotFoundException {
+		
+		int hours = 0, minutes = 0;
+		String formattedTotal = sumLogTotalsList(logList);
+		
+		if (formattedTotal.length() == 4) {
+	    	hours = Integer.parseInt(formattedTotal.substring(0, 1));
+	    	minutes = Integer.parseInt(formattedTotal.substring(2, 3));
+	    } else {
+	    	minutes = Integer.parseInt(formattedTotal.substring(0, 1));
+	    }
+		
+		
+		double timeWorked = (double) hours + (minutes / 60.0);
+        Double totalPayout = (timeWorked * Double.parseDouble(worker.getWage()));
+        
+        Currency usd = Currency.getInstance("USD");
+        NumberFormat format = NumberFormat.getCurrencyInstance(Locale.US);
+        format.setCurrency(usd);
+        
+        return format.format(totalPayout);
+	}
+	
+	
+	/** Format a time log as xH yM  where x is hours and y is minutes.
+	 *  @param totalHrs 
+	 *  @param totalMins 
+	 *  @return formatted time */
+	public String formatTimeLog(final int totalHrs, final int totalMins) {
+		
+		String totalHours = "";
+		if (totalHrs == 1) {
+			totalHours += "1 H ";
+		} else {
+			totalHours += "" + totalHrs + " Hs ";
+		}
+		
+		if (totalMins == 1) {
+			totalHours += "1 M";
+		} else {
+			totalHours += "" + totalMins + " Ms";
+		}
+		
+		return totalHours;
 	}
 
 }

@@ -46,9 +46,10 @@ public class ManagerPanel {
 	/** Format of currency. */
 	private NumberFormat currency;
 	
-	/** Manager name and password. */
+	/** New manager name. */
 	private JTextField manName;
 	
+	/** New manager password. */
 	private JPasswordField manPass;
 	
 	/** Totals the payroll data. */

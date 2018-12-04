@@ -23,6 +23,7 @@ import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -85,8 +86,9 @@ public class EmployeePanel {
 	}
 	
 	
-	/** Display the panel to the GUI. */
-	public void showPanel() {
+	/** Display the panel to the GUI. 
+	 * @throws FileNotFoundException */
+	public void showPanel() throws FileNotFoundException {
 		System.out.println("Display employee panel");
 		
 		/** set layout and bg */
@@ -219,6 +221,27 @@ public class EmployeePanel {
 		constraints.gridwidth = 2;
 		
 		organizedPanel.add(hours, constraints);
+		
+		AnalyzeData pay = new AnalyzeData();
+		
+		
+		JLabel totalPaidHours = new JLabel("Total Paid Hours: " 
+				+ pay.sumLogTotalsList(pay.getCertainTimeLogs(pay.getPaidTimeLogs(pay.getAllTimeLogs()), user)));
+		
+		totalPaidHours.setFont(new Font("Arial Black", Font.BOLD, 12));
+		constraints.gridy = 3;
+		constraints.ipady = 5;
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.anchor = GridBagConstraints.CENTER; 
+		organizedPanel.add(totalPaidHours, constraints);
+		
+		
+		JLabel totalPaidWages = new JLabel("Total Paid Wages: " 
+				+ pay.calculateWages(pay.getCertainTimeLogs(pay.getAllTimeLogs(), user), user));
+		
+		totalPaidWages.setFont(new Font("Arial Black", Font.BOLD, 12));
+		constraints.gridy = 4;
+		organizedPanel.add(totalPaidWages, constraints);
 
 		organizedPanel.setBackground(blue);
 		
