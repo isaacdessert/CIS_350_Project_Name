@@ -65,7 +65,7 @@ public class EmployeePanel {
 	 * constructor to set up the window.
 	 * @param employee : employee object of person logged in
 	 * @param pWindow : the gui
-	 * @throws FileNotFoundException 
+	 * @throws FileNotFoundException file not found 
 	 * */
 	public EmployeePanel(final JFrame pWindow, final Worker employee) throws FileNotFoundException {
 		user = employee;
@@ -87,7 +87,7 @@ public class EmployeePanel {
 	
 	
 	/** Display the panel to the GUI. 
-	 * @throws FileNotFoundException */
+	 * @throws FileNotFoundException  file not found */
 	public void showPanel() throws FileNotFoundException {
 		
 		/** set layout and bg */

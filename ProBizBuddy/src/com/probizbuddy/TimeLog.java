@@ -69,7 +69,7 @@ public class TimeLog {
 
 	
 	/** Setter method.
-	 * @param pID */
+	 * @param pID their unique id */
     public void setID(final String pID) {
         this.id = pID;
     }

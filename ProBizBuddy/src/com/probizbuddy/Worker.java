@@ -35,7 +35,7 @@ public class Worker implements User {
 	
 	
 	/** Getter method.
-	 * @return user password */
+	 * @return password their password */
 	public String getPassword() {
 		return password;
 	}
@@ -49,28 +49,28 @@ public class Worker implements User {
 
 	
 	/** Setter method.
-	 * @param pID */
+	 * @param pID their unique id */
     public void setID(final String pID) {
         this.id = pID;
     }
     
 	
 	/** Setter method.
-	 * @param name */
+	 * @param name their name */
     public void setName(final String name) {
         this.name = name;
     }
 
 
 	/** Setter method.
-	 * @param password */
+	 * @param password their password */
     public void setPassword(final String password) {
         this.password = password;
     }
     
     
 	/** Setter method.
-	 * @param wage */
+	 * @param wage their wage */
 	public void setWage(final String wage) {
 		this.wage = wage;
 	}

@@ -58,7 +58,7 @@ public class AnalyzeData {
 	
 	/** Count the number of employees clocked in.
 	 * @return the count
-	 * @throws FileNotFoundException */
+	 * @throws FileNotFoundException file not found */
 	public int countWorkers() throws FileNotFoundException {
 		if (getAllWorkers() != null) {
 			return getAllWorkers().size();
@@ -106,7 +106,7 @@ public class AnalyzeData {
 	
 	/** Count the number of employees clocked in.
 	 * @return the count
-	 * @throws FileNotFoundException */
+	 * @throws FileNotFoundException file not found */
 	public int countCurrentWorkers() throws FileNotFoundException {
 		if (getCurrentWorkers() != null) {
 			return getCurrentWorkers().size();
@@ -118,7 +118,7 @@ public class AnalyzeData {
 	
 	/** Get time logs as objects.
 	 *  @return all time log objects
-	 *  @throws FileNotFoundException */
+	 *  @throws FileNotFoundException file not found */
 	public List<TimeLog> getAllTimeLogs() throws FileNotFoundException {
 		
 		List<TimeLog> timeLogs = new ArrayList<TimeLog>();
@@ -160,10 +160,10 @@ public class AnalyzeData {
 	
 	
 	/** Get time logs as objects.
-	 *  @param logList 
-	 *  @param worker 
+	 *  @param logList list of logs
+	 *  @param worker worker object
 	 *  @return all time log objects
-	 *  @throws FileNotFoundException */
+	 *  @throws FileNotFoundException file not found */
 	public List<TimeLog> getCertainTimeLogs(final List<TimeLog> logList, final Worker worker) throws FileNotFoundException {
 		
 		List<TimeLog> timeLogs = new ArrayList<TimeLog>();
@@ -226,7 +226,7 @@ public class AnalyzeData {
 	
 	
 	/** Converts time logs into a sum.
-	 *  @param logs 
+	 *  @param logs logs object
 	 *  @return total hours they worked */
 	public String sumLogTotalsList(final List<TimeLog> logs) {
 		
@@ -257,10 +257,10 @@ public class AnalyzeData {
 	}
 	
 	/** Calculate wages from a list of time logs.
-	 *  @param logList 
-	 *  @param worker 
+	 *  @param logList list of logs
+	 *  @param worker worker object
 	 *  @return wages 
-	 *  @throws FileNotFoundException */
+	 *  @throws FileNotFoundException file not found */
 	public String calculateWages(final List<TimeLog> logList, final Worker worker) throws FileNotFoundException {
 		
 		int hours = 0, minutes = 0;
@@ -286,8 +286,8 @@ public class AnalyzeData {
 	
 	
 	/** Format a time log as xH yM  where x is hours and y is minutes.
-	 *  @param totalHrs 
-	 *  @param totalMins 
+	 *  @param totalHrs total hours
+	 *  @param totalMins total minutes
 	 *  @return formatted time */
 	public String formatTimeLog(final int totalHrs, final int totalMins) {
 		

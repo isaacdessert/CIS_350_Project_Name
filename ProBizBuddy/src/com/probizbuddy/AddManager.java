@@ -190,8 +190,8 @@ public class AddManager extends JPanel {
 	/** add the manager to the database.
 	 * @param name : manager's name
 	 * @param password : password 
-	 * @throws FileNotFoundException 
-	 * @throws UnsupportedEncodingException */
+	 * @throws FileNotFoundException file not found 
+	 * @throws UnsupportedEncodingException unsupported encoding */
 	public void setManager(final String name, final String password) throws UnsupportedEncodingException, FileNotFoundException {
 		
 		try {
@@ -215,7 +215,7 @@ public class AddManager extends JPanel {
 	/** add the manager to the database without log in.
 	 * @param name : manager's name
 	 * @param password : password 
-	 * @throws IOException */
+	 * @throws IOException io exception */
 	public void addManagerToDB(final String name, final String password) throws IOException {
 		try (FileWriter fw = new FileWriter("ManagersDB.txt", true);
 		     BufferedWriter bw = new BufferedWriter(fw);

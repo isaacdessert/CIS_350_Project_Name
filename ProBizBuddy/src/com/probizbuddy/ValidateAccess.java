@@ -170,7 +170,7 @@ public class ValidateAccess {
 	 * @param file : file
 	 * @param name : employee name
 	 * @return the list of this users data
-	 * @throws FileNotFoundException */
+	 * @throws FileNotFoundException file not found */
 	public  List<String> getUserData(final String file, final String name) throws FileNotFoundException {
 		File doc = new File(file);
 		final Scanner scanner = new Scanner(doc, "UTF-8");
@@ -199,7 +199,7 @@ public class ValidateAccess {
 	
 	/** Creates a manager object.
 	 *  @param name : user's name
-	 *  @throws FileNotFoundException 
+	 *  @throws FileNotFoundException file not found 
 	 *  @return manager object */
 	public Manager createManager(final String name) throws FileNotFoundException {
 		if (getUserData("ManagersDB.txt", name) != null) {
@@ -215,7 +215,7 @@ public class ValidateAccess {
 	
 	/** Creates a worker object.
 	 *  @param name : user's name
-	 *  @throws FileNotFoundException 
+	 *  @throws FileNotFoundException file not found 
 	 *  @return worker object */
 	public Worker createWorker(final String name) throws FileNotFoundException {
 		if (getUserData("WorkersDB.txt", name) != null) {

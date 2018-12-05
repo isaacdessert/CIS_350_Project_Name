@@ -16,16 +16,16 @@ interface User {
 	String getPassword();
 	
 	/** Setter method.
-	 * @param pID */
+	 * @param pID their unique id */
     void setID(String pID);
     
 	
 	/** Setter method.
-	 * @param name */
+	 * @param name their name */
     void setName(String name);
 
 
 	/** Setter method.
-	 * @param password */
+	 * @param password their password */
     void setPassword(String password);
 }
