@@ -4,6 +4,8 @@ package com.probizbuddy;
 public class TimeLog {
 	/** Every user must have these. */
 	private String id, startDate, startTime, endTime, totalTime;
+	
+	/** Boolean storing whether the TimeLog has been paid yet by the manager. */
 	private boolean paid;
 
 	

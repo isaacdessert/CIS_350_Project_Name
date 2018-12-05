@@ -89,7 +89,6 @@ public class EmployeePanel {
 	/** Display the panel to the GUI. 
 	 * @throws FileNotFoundException */
 	public void showPanel() throws FileNotFoundException {
-		System.out.println("Display employee panel");
 		
 		/** set layout and bg */
 		clock.setLayout(new GridBagLayout());
@@ -101,7 +100,6 @@ public class EmployeePanel {
 		// clock in button
 		clockIn = new JButton("Clock In");
 		clockIn.setFont(new Font("Arial Black", Font.BOLD, 20));
-		
 
 		c.ipadx = 50;
 		c.ipady = 25;
@@ -110,14 +108,13 @@ public class EmployeePanel {
 
 		clockIn.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-            		try {
-						clockIn();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
+        		try {
+					clockIn();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
             }
         });
-
 		
 		// clock out button
 		clockOut = new JButton("Clock Out");
@@ -145,7 +142,6 @@ public class EmployeePanel {
 		c.anchor = GridBagConstraints.NONE; 
 		c.insets = new Insets(0, 0, 0, 0);
 		
-		
 		// hours table header
 	    hours.setLayout(new GridBagLayout());
 	    c.ipady = 5;
@@ -163,8 +159,6 @@ public class EmployeePanel {
 		table.getTableHeader().setReorderingAllowed(false);
 		table.getTableHeader().setResizingAllowed(false);
 		
-		
-		// make toolbar
 		JButton logout = new JButton("Log Out");
 		logout.setFont(new Font("Arial Black", Font.BOLD, 12));
 		logout.setMargin(new Insets(5, 5, 5, 5));
@@ -178,10 +172,7 @@ public class EmployeePanel {
         		l.showPanel();
             }
         });
-		
-		
 
-		// toolbar
 		GridBagConstraints cTool = new GridBagConstraints();
 		toolbar.setLayout(new GridBagLayout());
 		cTool.gridx = 0;
@@ -198,7 +189,6 @@ public class EmployeePanel {
 		
 		toolbar.setBackground(new Color(49, 128, 159));
 		toolbar.add(logout, cTool);
-		
 		
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridx = 0;
@@ -224,7 +214,6 @@ public class EmployeePanel {
 		
 		AnalyzeData pay = new AnalyzeData();
 		
-		
 		JLabel totalPaidHours = new JLabel("Total Paid Hours: " 
 				+ pay.sumLogTotalsList(pay.getCertainTimeLogs(pay.getPaidTimeLogs(pay.getAllTimeLogs()), user)));
 		
@@ -235,16 +224,19 @@ public class EmployeePanel {
 		constraints.anchor = GridBagConstraints.CENTER; 
 		organizedPanel.add(totalPaidHours, constraints);
 		
+		/* FIX ME - null pointer
+
+			JLabel totalPaidWages = new JLabel("Total Paid Wages: " 
+					+ pay.calculateWages(pay.getCertainTimeLogs(pay.getAllTimeLogs(), user), user));
 		
-		JLabel totalPaidWages = new JLabel("Total Paid Wages: " 
-				+ pay.calculateWages(pay.getCertainTimeLogs(pay.getAllTimeLogs(), user), user));
 		
-		totalPaidWages.setFont(new Font("Arial Black", Font.BOLD, 12));
-		constraints.gridy = 4;
-		organizedPanel.add(totalPaidWages, constraints);
+			totalPaidWages.setFont(new Font("Arial Black", Font.BOLD, 12));
+			constraints.gridy = 4;
+			organizedPanel.add(totalPaidWages, constraints);
+		
+		*/
 
 		organizedPanel.setBackground(blue);
-		
 		window.getContentPane().add(organizedPanel);
 		
 		// determine which button to show the user
@@ -403,7 +395,7 @@ public class EmployeePanel {
 		FileWriter workers = new FileWriter("TimeLogDB.txt", false);
 		workers.write(tempData);
 		workers.close();
-		
+			
 		scanner.close();
 		
 		
@@ -417,9 +409,6 @@ public class EmployeePanel {
 	 * @throws FileNotFoundException if time log db does not exist
 	 */
 	public void fillTable() throws FileNotFoundException {
-		// only add data from this user
-		File doc = new File("TimeLogDB.txt");
-		final Scanner scanner = new Scanner(doc, "UTF-8");
 		
 		//wipe the current table
 		int rowCount = tableModel.getRowCount();

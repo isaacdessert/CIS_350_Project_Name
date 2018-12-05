@@ -147,11 +147,7 @@ public class ValidateAccess {
 		try {
 			br = new BufferedReader(new FileReader(file));
 
-			if (br.readLine() == null) {
-			    System.out.println(file + " is empty.");
-			    br.close();
-			    return null;
-			} else {
+			if (br.readLine() != null) {
 				workersList = new String(Files.readAllBytes(Paths.get(file)), StandardCharsets.UTF_8);
 				br.close();
 			}

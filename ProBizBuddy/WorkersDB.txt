@@ -1,2 +1,2 @@
-19675, John Doe, jd, 12.50
-56490, Reese Pankratz, rockfit, 12.00
+89991, Anna Mixon, gf, 10.00
+53743, Jag, prof, 60.0

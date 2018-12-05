@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-
 /** Class for analyzing database content. */
 public class AnalyzeData {
 	

@@ -25,7 +25,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 /** Main area for managers to control Pro Biz Buddy. */
@@ -289,7 +288,6 @@ public class ManagerPanel {
             }
         });
 		
-		
 		logout = new JButton("Log Out");
 		logout.setFont(buttonStyle);
 		
@@ -484,12 +482,12 @@ public class ManagerPanel {
 			
 			if (settingsList != null) {
 				// get federal amount
-				if (settingsList.get(0) != null) {
+				if (settingsList.get(0) != null && !settingsList.get(0).equals("")) {
 					fedIncomeTax = Double.parseDouble(settingsList.get(0));
 				}
 				
 				// get state amount
-				if (settingsList.get(1) != null) {
+				if (settingsList.get(1) != null && !settingsList.get(1).equals("")) {
 					staIncomeTax = Double.parseDouble(settingsList.get(1));
 				}
 			}
@@ -499,13 +497,13 @@ public class ManagerPanel {
 			totalRowData = new Object[] {"TOTAL GROSS PAY:", null, null, null, null, null, currency.format(totalPayout)};
 			tableModel.addRow(totalRowData);
 			
-			totalRowData = new Object[] {"FEDERAL INCOME TAX:", "Rate: " + fedIncomeTax + "%", null, null, null, null, "- " + currency.format(fedIncomeTax)};
+			totalRowData = new Object[] {"FEDERAL INCOME TAX:", "Rate: " + fedIncomeTax * 100 + "%", null, null, null, null, "- " + currency.format(fedIncomeTax)};
 			tableModel.addRow(totalRowData);
 			totalRowData = new Object[] {"SOCIAL SECURITY TAX:", "Rate: 6.2%", null, null, null, null, "- " + currency.format(secSecurityTax)};
 			tableModel.addRow(totalRowData);
 			totalRowData = new Object[] {"MEDICARE TAX:", "Rate: 1.45%", null, null, null, null, "- " + currency.format(medicareTax)};
 			tableModel.addRow(totalRowData);
-			totalRowData = new Object[] {"STATE INCOME TAX:", "Rate: " + staIncomeTax + "%", null, null, null, null, "- " + currency.format(staIncomeTax)};
+			totalRowData = new Object[] {"STATE INCOME TAX:", "Rate: " + staIncomeTax * 100 + "%", null, null, null, null, "- " + currency.format(staIncomeTax)};
 			tableModel.addRow(totalRowData);
 
 			// after deductions
@@ -753,11 +751,9 @@ public class ManagerPanel {
 	 * @throws FileNotFoundException */
 	private JPanel currentWorkers() throws FileNotFoundException {
 		currentWorkersPanel = new JPanel();
-		ValidateAccess v = new ValidateAccess();
 		
 		currentWorkersPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		
 		
 		AnalyzeData analyze = new AnalyzeData();
 		
