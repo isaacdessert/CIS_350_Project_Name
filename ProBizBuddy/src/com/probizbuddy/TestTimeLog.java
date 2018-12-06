@@ -10,14 +10,16 @@ class TestTimeLog {
 	public TestTimeLog() {
 		
 		//everything is a String except paid
-		TimeLog t = new TimeLog(  "pID",   "startDate",   "startTime",   "endTime",   "totalTime",   false /*paid*/)
 		
 	}
 
 	@Test
 	void test() {
 		
+		
 		try {
+			
+			TimeLog t = new TimeLog(  "pID",   "startDate",   "startTime",   "endTime",   "totalTime",   false /*paid*/);
 			
 			t.getID();
 				
@@ -42,6 +44,7 @@ class TestTimeLog {
 			
 
 			t.setStartDate("StartDate");
+			t.setStartDate("");
 			t.setStartDate("");
 			t.setStartDate("reallyloooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong");
 			t.setStartDate("10");
