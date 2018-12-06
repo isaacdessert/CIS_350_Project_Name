@@ -17,7 +17,7 @@ public class TestManager
 	public TestManager() {
 	}
 	
-	
+	//tests the Manager class
 	@Test
 	public void test() {
 		Manager v1 = new Manager("id","name","Password");
